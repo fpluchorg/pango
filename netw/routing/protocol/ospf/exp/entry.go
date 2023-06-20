@@ -3,7 +3,7 @@ package exp
 import (
 	"encoding/xml"
 
-	"github.com/PaloAltoNetworks/pango/version"
+	"github.com/fpluchorg/pango/version"
 )
 
 // Entry is a normalized, version independent representation of an OSPF

@@ -5,9 +5,9 @@ import (
 	"fmt"
 	"time"
 
-	"github.com/PaloAltoNetworks/pango/plugin"
-	"github.com/PaloAltoNetworks/pango/util"
-	"github.com/PaloAltoNetworks/pango/version"
+	"github.com/fpluchorg/pango/plugin"
+	"github.com/fpluchorg/pango/util"
+	"github.com/fpluchorg/pango/version"
 )
 
 type Response struct {

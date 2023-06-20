@@ -1,12 +1,12 @@
 package poli
 
 import (
-	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/fpluchorg/pango/util"
 
-	"github.com/PaloAltoNetworks/pango/poli/decryption"
-	"github.com/PaloAltoNetworks/pango/poli/nat"
-	"github.com/PaloAltoNetworks/pango/poli/pbf"
-	"github.com/PaloAltoNetworks/pango/poli/security"
+	"github.com/fpluchorg/pango/poli/decryption"
+	"github.com/fpluchorg/pango/poli/nat"
+	"github.com/fpluchorg/pango/poli/pbf"
+	"github.com/fpluchorg/pango/poli/security"
 )
 
 // Firewall is the client.Policies namespace.

@@ -3,8 +3,8 @@ package ssldecrypt
 import (
 	_ "fmt"
 
-	"github.com/PaloAltoNetworks/pango/namespace"
-	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/fpluchorg/pango/namespace"
+	"github.com/fpluchorg/pango/util"
 )
 
 // Firewall is the client.Device.SslDecrypt namespace.

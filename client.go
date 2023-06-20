@@ -18,10 +18,10 @@ import (
 	"strings"
 	"time"
 
-	"github.com/PaloAltoNetworks/pango/errors"
-	"github.com/PaloAltoNetworks/pango/plugin"
-	"github.com/PaloAltoNetworks/pango/util"
-	"github.com/PaloAltoNetworks/pango/version"
+	"github.com/fpluchorg/pango/errors"
+	"github.com/fpluchorg/pango/plugin"
+	"github.com/fpluchorg/pango/util"
+	"github.com/fpluchorg/pango/version"
 )
 
 // These bit flags control what is logged by client connections.  Of the flags

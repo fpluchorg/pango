@@ -3,8 +3,8 @@ package filetype
 import (
 	"regexp"
 
-	"github.com/PaloAltoNetworks/pango/namespace"
-	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/fpluchorg/pango/namespace"
+	"github.com/fpluchorg/pango/util"
 )
 
 // Panorama is the client.Predefined.TdbFileType namespace.

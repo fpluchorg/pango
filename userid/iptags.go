@@ -4,7 +4,7 @@ import (
 	"encoding/xml"
 	"fmt"
 
-	"github.com/PaloAltoNetworks/pango/version"
+	"github.com/fpluchorg/pango/version"
 )
 
 // GetIpTags returns the registered IP address / tags for the given vsys.

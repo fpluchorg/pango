@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/fpluchorg/pango/util"
 )
 
 // MultiConfigure is a container object for making a type=multi-config call.

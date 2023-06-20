@@ -4,7 +4,7 @@ import (
 	"encoding/xml"
 	"fmt"
 
-	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/fpluchorg/pango/util"
 )
 
 // FwAndCond is the client.Objects.AppSigAndCond namespace.

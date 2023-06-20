@@ -3,7 +3,7 @@ package userid
 import (
 	"testing"
 
-	"github.com/PaloAltoNetworks/pango/testdata"
+	"github.com/fpluchorg/pango/testdata"
 )
 
 func TestGetGroups(t *testing.T) {

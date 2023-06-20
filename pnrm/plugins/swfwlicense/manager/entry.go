@@ -2,7 +2,7 @@ package manager
 
 import (
 	"encoding/xml"
-	"github.com/PaloAltoNetworks/pango/plugin"
+	"github.com/fpluchorg/pango/plugin"
 )
 
 // Version Independent Data Structure

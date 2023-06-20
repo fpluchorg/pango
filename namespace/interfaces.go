@@ -1,8 +1,8 @@
 package namespace
 
 import (
-	"github.com/PaloAltoNetworks/pango/plugin"
-	"github.com/PaloAltoNetworks/pango/version"
+	"github.com/fpluchorg/pango/plugin"
+	"github.com/fpluchorg/pango/version"
 )
 
 // Namer returns the names of objects returned from PAN-OS.

@@ -10,9 +10,9 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/PaloAltoNetworks/pango/commit"
-	"github.com/PaloAltoNetworks/pango/errors"
-	"github.com/PaloAltoNetworks/pango/testdata"
+	"github.com/fpluchorg/pango/commit"
+	"github.com/fpluchorg/pango/errors"
+	"github.com/fpluchorg/pango/testdata"
 )
 
 func init() {

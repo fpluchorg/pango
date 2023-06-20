@@ -3,18 +3,18 @@ package pango
 import (
 	"encoding/xml"
 
-	"github.com/PaloAltoNetworks/pango/version"
+	"github.com/fpluchorg/pango/version"
 
 	// Various namespace imports.
-	"github.com/PaloAltoNetworks/pango/dev"
-	"github.com/PaloAltoNetworks/pango/licen"
-	"github.com/PaloAltoNetworks/pango/netw"
-	"github.com/PaloAltoNetworks/pango/objs"
-	"github.com/PaloAltoNetworks/pango/panosplugin"
-	"github.com/PaloAltoNetworks/pango/poli"
-	"github.com/PaloAltoNetworks/pango/predefined"
-	"github.com/PaloAltoNetworks/pango/userid"
-	"github.com/PaloAltoNetworks/pango/vsys"
+	"github.com/fpluchorg/pango/dev"
+	"github.com/fpluchorg/pango/licen"
+	"github.com/fpluchorg/pango/netw"
+	"github.com/fpluchorg/pango/objs"
+	"github.com/fpluchorg/pango/panosplugin"
+	"github.com/fpluchorg/pango/poli"
+	"github.com/fpluchorg/pango/predefined"
+	"github.com/fpluchorg/pango/userid"
+	"github.com/fpluchorg/pango/vsys"
 )
 
 // Firewall is a firewall specific client, providing version safe functions

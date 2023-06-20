@@ -4,7 +4,7 @@ import (
 	"bytes"
 	"encoding/xml"
 
-	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/fpluchorg/pango/util"
 )
 
 // UserId is the client.UserId namespace.

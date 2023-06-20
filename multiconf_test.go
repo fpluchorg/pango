@@ -6,7 +6,7 @@ import (
 	"strings"
 	"testing"
 
-	"github.com/PaloAltoNetworks/pango/objs/addr"
+	"github.com/fpluchorg/pango/objs/addr"
 )
 
 const invalidMultiConfigResp = `

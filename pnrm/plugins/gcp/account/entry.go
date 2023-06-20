@@ -3,7 +3,7 @@ package account
 import (
 	"encoding/xml"
 
-	"github.com/PaloAltoNetworks/pango/plugin"
+	"github.com/fpluchorg/pango/plugin"
 )
 
 // Entry is a normalized, version independent representation of GCP account credentials.

@@ -1,12 +1,12 @@
 package predefined
 
 import (
-	"github.com/PaloAltoNetworks/pango/objs/app"
-	"github.com/PaloAltoNetworks/pango/objs/srvc"
-	dlpft "github.com/PaloAltoNetworks/pango/predefined/dlp/filetype"
-	tdbft "github.com/PaloAltoNetworks/pango/predefined/tdb/filetype"
-	"github.com/PaloAltoNetworks/pango/predefined/threat"
-	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/fpluchorg/pango/objs/app"
+	"github.com/fpluchorg/pango/objs/srvc"
+	dlpft "github.com/fpluchorg/pango/predefined/dlp/filetype"
+	tdbft "github.com/fpluchorg/pango/predefined/tdb/filetype"
+	"github.com/fpluchorg/pango/predefined/threat"
+	"github.com/fpluchorg/pango/util"
 )
 
 type Panorama struct {

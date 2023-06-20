@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/PaloAltoNetworks/pango/audit"
-	"github.com/PaloAltoNetworks/pango/namespace"
-	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/fpluchorg/pango/audit"
+	"github.com/fpluchorg/pango/namespace"
+	"github.com/fpluchorg/pango/util"
 )
 
 // Panorama is the client.Policies.Nat namespace.

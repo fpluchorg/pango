@@ -1,8 +1,8 @@
 package general
 
 import (
-	"github.com/PaloAltoNetworks/pango/namespace"
-	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/fpluchorg/pango/namespace"
+	"github.com/fpluchorg/pango/util"
 )
 
 // Firewall is a namespace struct, included as part of pango.Client.

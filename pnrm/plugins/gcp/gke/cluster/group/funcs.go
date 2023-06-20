@@ -4,9 +4,9 @@ import (
 	"fmt"
 	"strings"
 
-	"github.com/PaloAltoNetworks/pango/namespace"
-	"github.com/PaloAltoNetworks/pango/plugin"
-	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/fpluchorg/pango/namespace"
+	"github.com/fpluchorg/pango/plugin"
+	"github.com/fpluchorg/pango/util"
 )
 
 func versioning(pkgs []plugin.Info) (normalizer, func(Entry) interface{}, error) {

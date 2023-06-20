@@ -1,8 +1,8 @@
 package srvc
 
 import (
-	"github.com/PaloAltoNetworks/pango/namespace"
-	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/fpluchorg/pango/namespace"
+	"github.com/fpluchorg/pango/util"
 )
 
 // Predefined is the client.Predefined.Service namespace.

@@ -3,8 +3,8 @@ package neighbor
 import (
 	"encoding/xml"
 
-	"github.com/PaloAltoNetworks/pango/util"
-	"github.com/PaloAltoNetworks/pango/version"
+	"github.com/fpluchorg/pango/util"
+	"github.com/fpluchorg/pango/version"
 )
 
 // Config is a normalized, version independent representation of an IPv6

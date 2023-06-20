@@ -3,7 +3,7 @@ package signature
 import (
 	"encoding/xml"
 
-	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/fpluchorg/pango/util"
 )
 
 // Entry is a normalized, version independent representation of an application signature.

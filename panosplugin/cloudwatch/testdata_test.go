@@ -1,7 +1,7 @@
 package cloudwatch
 
 import (
-	"github.com/PaloAltoNetworks/pango/plugin"
+	"github.com/fpluchorg/pango/plugin"
 )
 
 type tc struct {

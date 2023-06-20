@@ -4,7 +4,7 @@ import (
 	"encoding/xml"
 	"fmt"
 
-	"github.com/PaloAltoNetworks/pango/version"
+	"github.com/fpluchorg/pango/version"
 )
 
 // Entry is a normalized, version independent representation of an

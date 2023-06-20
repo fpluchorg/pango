@@ -1,8 +1,8 @@
 package panosplugin
 
 import (
-	"github.com/PaloAltoNetworks/pango/panosplugin/cloudwatch"
-	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/fpluchorg/pango/panosplugin/cloudwatch"
+	"github.com/fpluchorg/pango/util"
 )
 
 type Firewall struct {

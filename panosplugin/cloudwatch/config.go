@@ -3,8 +3,8 @@ package cloudwatch
 import (
 	"encoding/xml"
 
-	"github.com/PaloAltoNetworks/pango/plugin"
-	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/fpluchorg/pango/plugin"
+	"github.com/fpluchorg/pango/util"
 )
 
 // Config is a normalized, version independent representation of an

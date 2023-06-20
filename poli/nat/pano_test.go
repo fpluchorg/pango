@@ -4,8 +4,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/PaloAltoNetworks/pango/testdata"
-	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/fpluchorg/pango/testdata"
+	"github.com/fpluchorg/pango/util"
 )
 
 func TestPanoNormalization(t *testing.T) {

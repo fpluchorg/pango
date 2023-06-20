@@ -2,9 +2,9 @@ package manager
 
 import (
 	"fmt"
-	"github.com/PaloAltoNetworks/pango/namespace"
-	"github.com/PaloAltoNetworks/pango/plugin"
-	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/fpluchorg/pango/namespace"
+	"github.com/fpluchorg/pango/plugin"
+	"github.com/fpluchorg/pango/util"
 	"strings"
 )
 

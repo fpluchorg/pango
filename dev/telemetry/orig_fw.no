@@ -1,7 +1,7 @@
 package telemetry
 
 import (
-	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/fpluchorg/pango/util"
 )
 
 // FwTelemetry is a namespace struct, included as part of pango.Firewall.

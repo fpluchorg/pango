@@ -3,7 +3,7 @@ package commit
 import (
 	"encoding/xml"
 
-	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/fpluchorg/pango/util"
 )
 
 // FirewallCommit is a normalized object for defining firewall commits.

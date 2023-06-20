@@ -3,12 +3,12 @@ package pango_test
 import (
 	"log"
 
-	"github.com/PaloAltoNetworks/pango"
-	"github.com/PaloAltoNetworks/pango/commit"
-	"github.com/PaloAltoNetworks/pango/objs/addr"
-	"github.com/PaloAltoNetworks/pango/objs/addrgrp"
-	"github.com/PaloAltoNetworks/pango/poli/security"
-	"github.com/PaloAltoNetworks/pango/util"
+	"github.com/fpluchorg/pango"
+	"github.com/fpluchorg/pango/commit"
+	"github.com/fpluchorg/pango/objs/addr"
+	"github.com/fpluchorg/pango/objs/addrgrp"
+	"github.com/fpluchorg/pango/poli/security"
+	"github.com/fpluchorg/pango/util"
 )
 
 // Example_createAddressGroup is a Panorama example on how to create/delete a

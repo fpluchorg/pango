@@ -1,7 +1,7 @@
 package bgp
 
 import (
-	"github.com/PaloAltoNetworks/pango/version"
+	"github.com/fpluchorg/pango/version"
 )
 
 type testCase struct {

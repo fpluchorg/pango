@@ -4,8 +4,8 @@ import (
 	"encoding/xml"
 	"fmt"
 
-	"github.com/PaloAltoNetworks/pango/util"
-	"github.com/PaloAltoNetworks/pango/version"
+	"github.com/fpluchorg/pango/util"
+	"github.com/fpluchorg/pango/version"
 )
 
 // PanoAction is the client.Objects.LogForwardingProfileMatchListAction namespace.

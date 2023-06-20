@@ -6,9 +6,9 @@ import (
 	"strings"
 	"time"
 
-	"github.com/PaloAltoNetworks/pango/audit"
-	"github.com/PaloAltoNetworks/pango/util"
-	"github.com/PaloAltoNetworks/pango/version"
+	"github.com/fpluchorg/pango/audit"
+	"github.com/fpluchorg/pango/util"
+	"github.com/fpluchorg/pango/version"
 )
 
 /*

@@ -3,9 +3,9 @@ package ipv6
 import (
 	"fmt"
 
-	"github.com/PaloAltoNetworks/pango/namespace"
-	"github.com/PaloAltoNetworks/pango/util"
-	"github.com/PaloAltoNetworks/pango/version"
+	"github.com/fpluchorg/pango/namespace"
+	"github.com/fpluchorg/pango/util"
+	"github.com/fpluchorg/pango/version"
 )
 
 func versioning(v version.Number) (normalizer, func(Entry) interface{}) {

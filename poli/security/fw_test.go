@@ -5,8 +5,8 @@ import (
 	"reflect"
 	"testing"
 
-	"github.com/PaloAltoNetworks/pango/testdata"
-	"github.com/PaloAltoNetworks/pango/version"
+	"github.com/fpluchorg/pango/testdata"
+	"github.com/fpluchorg/pango/version"
 )
 
 func TestFwNormalization(t *testing.T) {

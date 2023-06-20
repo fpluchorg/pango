@@ -4,7 +4,7 @@ import (
 	"fmt"
 	"testing"
 
-	"github.com/PaloAltoNetworks/pango/testdata"
+	"github.com/fpluchorg/pango/testdata"
 )
 
 func TestCurrent(t *testing.T) {
