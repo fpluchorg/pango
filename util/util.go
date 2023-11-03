@@ -127,6 +127,42 @@ func AsMemberXpath(vals []string) string {
 	return buf.String()
 }
 
+// LogCollectorGroupDeviceXpathPrefix returns the logcollector xpath prefix of the given logcollector name.
+func LogCollectorGroupDeviceXpathPrefix(logcollectorgroup, device string) []string {
+	return []string{
+		"config",
+		"devices",
+		AsEntryXpath([]string{"localhost.localdomain"}),
+		"log-collector-group",
+		AsEntryXpath([]string{logcollectorgroup}),
+		"logfwd-setting",
+		"devices",
+		AsEntryXpath([]string{device}),
+	}
+}
+
+// LogCollectorGroupXpathPrefix returns the logcollector xpath prefix of the given logcollector name.
+func LogCollectorGroupXpathPrefix(logcollectorgroup string) []string {
+	return []string{
+		"config",
+		"devices",
+		AsEntryXpath([]string{"localhost.localdomain"}),
+		"log-collector-group",
+		AsEntryXpath([]string{logcollectorgroup}),
+	}
+}
+
+// LogCollectorXpathPrefix returns the logcollector xpath prefix of the given logcollector name.
+func LogCollectorXpathPrefix(logcollector string) []string {
+	return []string{
+		"config",
+		"devices",
+		AsEntryXpath([]string{"localhost.localdomain"}),
+		"log-collector",
+		AsEntryXpath([]string{logcollector}),
+	}
+}
+
 // TemplateXpathPrefix returns the template xpath prefix of the given template name.
 func TemplateXpathPrefix(tmpl, ts string) []string {
 	if tmpl != "" {
