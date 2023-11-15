@@ -9,6 +9,7 @@ import (
 	// Various namespace imports.
 	"github.com/fpluchorg/pango/dev"
 	"github.com/fpluchorg/pango/licen"
+	"github.com/fpluchorg/pango/mgtconfig"
 	"github.com/fpluchorg/pango/netw"
 	"github.com/fpluchorg/pango/objs"
 	"github.com/fpluchorg/pango/pnrm"
@@ -25,8 +26,8 @@ import (
 // Initialize() to prepare it for use.
 //
 // It has the following namespaces:
-//      * Licensing
-//      * UserId
+//   - Licensing
+//   - UserId
 type Panorama struct {
 	Client
 
@@ -35,6 +36,7 @@ type Panorama struct {
 	Device     *dev.Panorama
 	Licensing  *licen.Licen
 	UserId     *userid.UserId
+	MGTConfig  *mgtconfig.Panorama
 	Panorama   *pnrm.Panorama
 	Objects    *objs.PanoObjs
 	Policies   *poli.Panorama
@@ -48,10 +50,10 @@ type Panorama struct {
 // client's SystemInfo map.
 //
 // If not specified, the following is assumed:
-//  * Protocol: https
-//  * Port: (unspecified)
-//  * Timeout: 10
-//  * Logging: LogAction | LogUid
+//   - Protocol: https
+//   - Port: (unspecified)
+//   - Timeout: 10
+//   - Logging: LogAction | LogUid
 func (c *Panorama) Initialize() error {
 	if len(c.rb) == 0 {
 		var e error
@@ -216,6 +218,8 @@ func (c *Panorama) initNamespaces() {
 
 	c.UserId = &userid.UserId{}
 	c.UserId.Initialize(c)
+
+	c.MGTConfig = mgtconfig.PanoramaNamespace(c)
 
 	c.Panorama = pnrm.PanoramaNamespace(c)
 
