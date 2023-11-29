@@ -42,19 +42,19 @@ import (
 //
 // The bit-wise flags are as follows:
 //
-//      * LogQuiet: disables all logging
-//      * LogAction: action being performed (Set / Edit / Delete functions)
-//      * LogQuery: queries being run (Get / Show functions)
-//      * LogOp: operation commands (Op functions)
-//      * LogUid: User-Id commands (Uid functions)
-//      * LogLog: log retrieval commands
-//      * LogExport: log export commands
-//      * LogXpath: the resultant xpath
-//      * LogSend: xml docuemnt being sent
-//      * LogReceive: xml responses being received
-//      * LogOsxCurl: output an OSX cURL command for the data being sent in
-//      * LogCurlWithPersonalData: If doing a curl style logging, then include
-//        personal data in the curl command instead of tokens.
+//   - LogQuiet: disables all logging
+//   - LogAction: action being performed (Set / Edit / Delete functions)
+//   - LogQuery: queries being run (Get / Show functions)
+//   - LogOp: operation commands (Op functions)
+//   - LogUid: User-Id commands (Uid functions)
+//   - LogLog: log retrieval commands
+//   - LogExport: log export commands
+//   - LogXpath: the resultant xpath
+//   - LogSend: xml docuemnt being sent
+//   - LogReceive: xml responses being received
+//   - LogOsxCurl: output an OSX cURL command for the data being sent in
+//   - LogCurlWithPersonalData: If doing a curl style logging, then include
+//     personal data in the curl command instead of tokens.
 const (
 	LogQuiet = 1 << (iota + 1)
 	LogAction
@@ -168,10 +168,10 @@ func (c *Client) Plugins() []plugin.Info {
 // client's SystemInfo map.
 //
 // If not specified, the following is assumed:
-//  * Protocol: https
-//  * Port: (unspecified)
-//  * Timeout: 10
-//  * Logging: LogAction | LogUid
+//   - Protocol: https
+//   - Port: (unspecified)
+//   - Timeout: 10
+//   - Logging: LogAction | LogUid
 func (c *Client) Initialize() error {
 	if len(c.rb) == 0 {
 		var e error
@@ -320,7 +320,6 @@ func (c *Client) RequestPasswordHash(val string) (string, error) {
 //
 // Setting sync to true means that this function will block until the job
 // finishes.
-//
 //
 // The sleep param is an optional sleep duration to wait between polling for
 // job completion.  This param is only used if sync is set to true.
@@ -545,6 +544,81 @@ func (c *Client) WaitForJob(id uint, sleep time.Duration, extras, resp interface
 
 		// Check for end condition.
 		if ans.Progress == 100 {
+			if all_done {
+				break
+			} else if !dp {
+				c.LogOp("(op) Waiting for %d device commits ...", len(ans.Devices))
+				dp = true
+			}
+		}
+
+		if sleep > 0 {
+			time.Sleep(sleep)
+		}
+	}
+
+	// Check the results for a failed commit.
+	if ans.Result == "FAIL" {
+		if len(ans.Details.Lines) > 0 {
+			return fmt.Errorf(ans.Details.String())
+		} else {
+			return fmt.Errorf("Job %d has failed to complete successfully", id)
+		}
+	} else if !all_ok {
+		return fmt.Errorf("Commit failed on one or more devices")
+	}
+
+	if resp == nil {
+		return nil
+	}
+
+	return xml.Unmarshal(data, resp)
+}
+
+// WaitForJobNoProgress polls the device, waiting for the specified job to finish.
+//
+// This is a copy of WaitForJob but for tasks that do not update their progress
+// up to 100%. SO we onbly use the Status as indicator
+
+func (c *Client) WaitForJobNoProgress(id uint, sleep time.Duration, extras, resp interface{}) error {
+	var err error
+	var data []byte
+	dp := false
+	all_ok := true
+
+	c.LogOp("(op) waiting for job %d", id)
+	type op_req struct {
+		XMLName xml.Name `xml:"show"`
+		Id      uint     `xml:"jobs>id"`
+	}
+	req := op_req{Id: id}
+
+	var ans util.BasicJob
+	for {
+		// We need to zero out the response each iteration because the slices
+		// of strings append to each other instead of zeroing out.
+		ans = util.BasicJob{}
+
+		// Get current percent complete.
+		data, err = c.Op(req, "", extras, &ans)
+		if err != nil {
+			return err
+		}
+
+		// Check for device commits.
+		all_done := true
+		for _, d := range ans.Devices {
+			c.LogOp("%q result: %s", d.Serial, d.Result)
+			if d.Result == "PEND" {
+				all_done = false
+				break
+			} else if d.Result != "OK" && all_ok {
+				all_ok = false
+			}
+		}
+
+		// Check for end condition.
+		if ans.Result == "OK" {
 			if all_done {
 				break
 			} else if !dp {
