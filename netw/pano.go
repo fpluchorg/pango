@@ -1,6 +1,7 @@
 package netw
 
 import (
+	"github.com/fpluchorg/pango/netw/dhcp"
 	"github.com/fpluchorg/pango/netw/ikegw"
 	aggeth "github.com/fpluchorg/pango/netw/interface/aggregate"
 	"github.com/fpluchorg/pango/netw/interface/arp"
@@ -69,6 +70,7 @@ type Panorama struct {
 	BgpPeer                         *peer.Panorama
 	BgpPeerGroup                    *group.Panorama
 	BgpRedistRule                   *bgpredist.Panorama
+	Dhcp                            *dhcp.Panorama
 	EthernetInterface               *eth.Panorama
 	GlobalProtectIpsecCryptoProfile *gp.Panorama
 	GreTunnel                       *gre.Panorama
@@ -119,6 +121,7 @@ func PanoramaNamespace(x util.XapiClient) *Panorama {
 		BgpPeer:                         peer.PanoramaNamespace(x),
 		BgpPeerGroup:                    group.PanoramaNamespace(x),
 		BgpRedistRule:                   bgpredist.PanoramaNamespace(x),
+		Dhcp:                            dhcp.PanoramaNamespace(x),
 		EthernetInterface:               eth.PanoramaNamespace(x),
 		GlobalProtectIpsecCryptoProfile: gp.PanoramaNamespace(x),
 		GreTunnel:                       gre.PanoramaNamespace(x),
