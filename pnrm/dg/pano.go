@@ -2,6 +2,7 @@ package dg
 
 import (
 	"encoding/xml"
+	"fmt"
 
 	"github.com/fpluchorg/pango/namespace"
 	"github.com/fpluchorg/pango/util"
@@ -10,6 +11,93 @@ import (
 // Panorama is the client.Panorama.DeviceGroup namespace.
 type Panorama struct {
 	ns *namespace.Standard
+}
+
+/*
+SetDevice performs a SET to add specific device to device group dg.
+
+The template stack can be either a string or an Entry object.
+*/
+func (c *Panorama) SetDevice(dg interface{}, d string) error {
+	var name string
+
+	switch v := dg.(type) {
+	case string:
+		name = v
+	case Entry:
+		name = v.Name
+	default:
+		return fmt.Errorf("Unknown type sent to set device: %s", v)
+	}
+
+	c.ns.Client.LogAction("(set) device in device group: %s", name)
+
+	path, err := c.xpath([]string{name})
+	if err != nil {
+		return err
+	}
+	path = append(path, "devices")
+
+	_, err = c.ns.Client.Set(path, util.Entry{Value: d}, nil, nil)
+	return err
+}
+
+/*
+EditDevice performs an EDIT to add specific device to device group dg.
+
+The template stack can be either a string or an Entry object.
+*/
+func (c *Panorama) EditDevice(dg interface{}, d string) error {
+	var name string
+
+	switch v := dg.(type) {
+	case string:
+		name = v
+	case Entry:
+		name = v.Name
+	default:
+		return fmt.Errorf("Unknown type sent to edit device: %s", v)
+	}
+
+	c.ns.Client.LogAction("(edit) device in device group: %s", name)
+
+	path, err := c.xpath([]string{name})
+	if err != nil {
+		return err
+	}
+	path = append(path, "devices", util.AsEntryXpath([]string{d}))
+
+	_, err = c.ns.Client.Edit(path, util.Entry{Value: d}, nil, nil)
+	return err
+}
+
+/*
+DeleteDevice performs a DELETE to remove specific device d from device group dg.
+
+The template stack can be either a string or an Entry object.
+*/
+func (c *Panorama) DeleteDevice(dg interface{}, d string) error {
+	var name string
+
+	switch v := dg.(type) {
+	case string:
+		name = v
+	case Entry:
+		name = v.Name
+	default:
+		return fmt.Errorf("Unknown type sent to delete device: %s", v)
+	}
+
+	c.ns.Client.LogAction("(delete) device from device group: %s", name)
+
+	path, err := c.xpath([]string{name})
+	if err != nil {
+		return err
+	}
+	path = append(path, "devices", util.AsEntryXpath([]string{d}))
+
+	_, err = c.ns.Client.Delete(path, nil, nil)
+	return err
 }
 
 // GetList performs GET to retrieve a list of all objects.
