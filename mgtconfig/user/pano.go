@@ -11,76 +11,89 @@ type Panorama struct {
 }
 
 // GetList performs GET to retrieve a list of all objects.
-func (c *Panorama) GetList() ([]string, error) {
+func (c *Panorama) GetList(tmpl string) ([]string, error) {
 	ans := c.container()
-	return c.ns.Listing(util.Get, c.pather(), ans)
+	return c.ns.Listing(util.Get, c.pather(tmpl), ans)
 }
 
 // ShowList performs SHOW to retrieve a list of all objects.
-func (c *Panorama) ShowList() ([]string, error) {
+func (c *Panorama) ShowList(tmpl string) ([]string, error) {
 	ans := c.container()
-	return c.ns.Listing(util.Show, c.pather(), ans)
+	return c.ns.Listing(util.Show, c.pather(tmpl), ans)
 }
 
 // Get performs GET to retrieve information for the given object.
-func (c *Panorama) Get(name string) (Entry, error) {
+func (c *Panorama) Get(tmpl string, name string) (Entry, error) {
 	ans := c.container()
-	err := c.ns.Object(util.Get, c.pather(), name, ans)
+	err := c.ns.Object(util.Get, c.pather(tmpl), name, ans)
 	return first(ans, err)
 }
 
 // Show performs SHOW to retrieve information for the given object.
-func (c *Panorama) Show(name string) (Entry, error) {
+func (c *Panorama) Show(tmpl string, name string) (Entry, error) {
 	ans := c.container()
-	err := c.ns.Object(util.Show, c.pather(), name, ans)
+	err := c.ns.Object(util.Show, c.pather(tmpl), name, ans)
 	return first(ans, err)
 }
 
 // GetAll performs GET to retrieve all objects configured.
-func (c *Panorama) GetAll() ([]Entry, error) {
+func (c *Panorama) GetAll(tmpl string) ([]Entry, error) {
 	ans := c.container()
-	err := c.ns.Objects(util.Get, c.pather(), ans)
+	err := c.ns.Objects(util.Get, c.pather(tmpl), ans)
 	return all(ans, err)
 }
 
 // ShowAll performs SHOW to retrieve information for all objects.
-func (c *Panorama) ShowAll() ([]Entry, error) {
+func (c *Panorama) ShowAll(tmpl string) ([]Entry, error) {
 	ans := c.container()
-	err := c.ns.Objects(util.Show, c.pather(), ans)
+	err := c.ns.Objects(util.Show, c.pather(tmpl), ans)
 	return all(ans, err)
 }
 
 // Set performs SET to configure the specified objects.
-func (c *Panorama) Set(e ...Entry) error {
-	return c.ns.Set(c.pather(), specifier(e...))
+func (c *Panorama) Set(tmpl string, e ...Entry) error {
+	return c.ns.Set(c.pather(tmpl), specifier(e...))
 }
 
 // Edit performs EDIT to configure the specified object.
-func (c *Panorama) Edit(e Entry) error {
-	return c.ns.Edit(c.pather(), e)
+func (c *Panorama) Edit(tmpl string, e Entry) error {
+	return c.ns.Edit(c.pather(tmpl), e)
 }
 
 // Delete performs DELETE to remove the specified objects.
 //
 // Objects can be either a string or an Entry object.
-func (c *Panorama) Delete(e ...interface{}) error {
+func (c *Panorama) Delete(tmpl string, e ...interface{}) error {
 	names, nErr := toNames(e)
-	return c.ns.Delete(c.pather(), names, nErr)
+	return c.ns.Delete(c.pather(tmpl), names, nErr)
 }
 
-func (c *Panorama) pather() namespace.Pather {
+func (c *Panorama) pather(tmpl string) namespace.Pather {
 	return func(v []string) ([]string, error) {
-		return c.xpath(v)
+		return c.xpath(tmpl, v)
 	}
 }
 
-func (c *Panorama) xpath(vals []string) ([]string, error) {
-	return []string{
+func (c *Panorama) xpath(tmpl string, vals []string) ([]string, error) {
+	var ans []string
+
+	// Commands > devices > entry[@name='localhost.localdomain'] > template > entry[@name='t-common-base'] > config > mgt-config
+
+	if tmpl != "" {
+		ans = make([]string, 0, 12)
+		ans = append(ans, util.TemplateXpathPrefix(tmpl, "")...)
+	} else {
+		ans = make([]string, 0, 4)
+	}
+
+	ans = append(ans,
 		"config",
 		"mgt-config",
 		"users",
 		util.AsEntryXpath(vals),
-	}, nil
+	)
+
+	return ans, nil
 }
 
 func (c *Panorama) container() normalizer {
