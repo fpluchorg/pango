@@ -11,6 +11,7 @@ import (
 type Entry struct {
 	Name         string
 	PasswordHash string
+	PublicKey    string
 	Type         string
 	Role         string
 }
@@ -20,6 +21,7 @@ type Entry struct {
 func (o *Entry) Copy(s Entry) {
 	o.Name = s.Name
 	o.PasswordHash = s.PasswordHash
+	o.PublicKey = s.PublicKey
 	o.Type = s.Type
 	o.Role = s.Role
 }
@@ -62,6 +64,7 @@ func (o *entry_v1) normalize() Entry {
 	ans := Entry{
 		Name:         o.Name,
 		PasswordHash: o.PasswordHash,
+		PublicKey:    o.PublicKey,
 	}
 
 	if o.SuperUser == "yes" || o.SuperReader == "yes" || o.PanoramaAdmin == "yes" {
@@ -87,6 +90,7 @@ type entry_v1 struct {
 	XMLName       xml.Name `xml:"entry"`
 	Name          string   `xml:"name,attr"`
 	PasswordHash  string   `xml:"phash"`
+	PublicKey     string   `xml:"public-key,omitempty"`
 	SuperUser     string   `xml:"permissions>role-based>superuser,omitempty"`
 	SuperReader   string   `xml:"permissions>role-based>superreader,omitempty"`
 	PanoramaAdmin string   `xml:"permissions>role-based>panorama-admin,omitempty"`
