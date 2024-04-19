@@ -2,9 +2,19 @@ package user
 
 import (
 	"encoding/xml"
-
 	"github.com/fpluchorg/pango/util"
+
 	"github.com/fpluchorg/pango/version"
+)
+
+const (
+	DeviceAdmin   = "deviceadmin"
+	DeviceReader  = "devicereader"
+	SuperReader   = "superreader"
+	SuperUser     = "superuser"
+	Dynamic       = "dynamic"
+	PanoramaAdmin = "panorama-admin"
+	Custom        = "custom"
 )
 
 // Entry is a normalized, version independent representation of a device group.
@@ -64,23 +74,52 @@ func (o *entry_v1) normalize() Entry {
 	ans := Entry{
 		Name:         o.Name,
 		PasswordHash: o.PasswordHash,
-		PublicKey:    o.PublicKey,
+	}
+	if o.PublicKey != nil {
+		ans.PublicKey = *o.PublicKey
 	}
 
-	if o.SuperUser == "yes" || o.SuperReader == "yes" || o.PanoramaAdmin == "yes" {
-		ans.Type = "dynamic"
-		if o.SuperUser == "yes" {
-			ans.Role = "superuser"
-		} else if o.SuperReader == "yes" {
-			ans.Role = "superreader"
-		} else if o.PanoramaAdmin == "yes" {
-			ans.Role = "panorama-admin"
+	var (
+		superUser     string
+		superReader   string
+		panoramaAdmin string
+		deviceAdmin   string
+		deviceReader  string
+	)
+	if o.SuperUser != nil && *o.SuperUser == util.YesNo(true) {
+		superUser = *o.SuperUser
+	}
+	if o.SuperReader != nil && *o.SuperReader == util.YesNo(true) {
+		superReader = *o.SuperReader
+	}
+	if o.DeviceAdmin != nil && *o.DeviceAdmin == util.YesNo(true) {
+		deviceAdmin = *o.DeviceAdmin
+	}
+	if o.DeviceReader != nil && *o.DeviceReader == util.YesNo(true) {
+		deviceReader = *o.DeviceReader
+	}
+	if o.PanoramaAdmin != nil && *o.PanoramaAdmin == util.YesNo(true) {
+		panoramaAdmin = *o.PanoramaAdmin
+	}
+
+	if superUser == util.YesNo(true) || superReader == util.YesNo(true) || deviceAdmin == util.YesNo(true) || deviceReader == util.YesNo(true) || panoramaAdmin == util.YesNo(true) {
+		ans.Type = Dynamic
+		if superUser == util.YesNo(true) {
+			ans.Role = SuperUser
+		} else if superReader == util.YesNo(true) {
+			ans.Role = SuperReader
+		} else if deviceAdmin == util.YesNo(true) {
+			ans.Role = DeviceAdmin
+		} else if deviceReader == util.YesNo(true) {
+			ans.Role = DeviceReader
+		} else if panoramaAdmin == util.YesNo(true) {
+			ans.Role = PanoramaAdmin
 		} else {
 			ans.Role = "ERROR"
 		}
-	} else if o.CustomProfile != "" {
-		ans.Type = "custom"
-		ans.Role = o.CustomProfile
+	} else if o.CustomProfile != nil {
+		ans.Type = Custom
+		ans.Role = *o.CustomProfile
 	}
 
 	return ans
@@ -89,12 +128,14 @@ func (o *entry_v1) normalize() Entry {
 type entry_v1 struct {
 	XMLName       xml.Name `xml:"entry"`
 	Name          string   `xml:"name,attr"`
-	PasswordHash  string   `xml:"phash"`
-	PublicKey     string   `xml:"public-key,omitempty"`
-	SuperUser     string   `xml:"permissions>role-based>superuser,omitempty"`
-	SuperReader   string   `xml:"permissions>role-based>superreader,omitempty"`
-	PanoramaAdmin string   `xml:"permissions>role-based>panorama-admin,omitempty"`
-	CustomProfile string   `xml:"permissions>role-based>custom>profile,omitempty"`
+	PasswordHash  string   `xml:"phash,omitempty"`
+	PublicKey     *string  `xml:"public-key,omitempty"`
+	SuperUser     *string  `xml:"permissions>role-based>superuser"`
+	SuperReader   *string  `xml:"permissions>role-based>superreader"`
+	DeviceReader  *string  `xml:"permissions>role-based>devicereader"`
+	DeviceAdmin   *string  `xml:"permissions>role-based>deviceadmin"`
+	PanoramaAdmin *string  `xml:"permissions>role-based>panorama-admin"`
+	CustomProfile *string  `xml:"permissions>role-based>custom>profile"`
 }
 
 func specify_v1(e Entry) interface{} {
@@ -103,16 +144,33 @@ func specify_v1(e Entry) interface{} {
 		PasswordHash: e.PasswordHash,
 	}
 
-	if e.Type == "dynamic" {
-		if e.Role == "superuser" {
-			ans.SuperUser = util.YesNo(true)
-		} else if e.Role == "superreader" {
-			ans.SuperReader = util.YesNo(true)
-		} else if e.Role == "panorama-admin" {
-			ans.PanoramaAdmin = util.YesNo(true)
+	if e.PublicKey != util.EmptyString {
+		ans.PublicKey = &e.PublicKey
+	}
+
+	true := util.YesNo(true)
+	emptyString := util.EmptyString
+
+	switch e.Type {
+	case Dynamic:
+		switch e.Role {
+		case SuperUser:
+			ans.SuperUser = &true
+		case SuperReader:
+			ans.SuperReader = &true
+		case DeviceReader:
+			ans.DeviceReader = &emptyString
+		case DeviceAdmin:
+			ans.DeviceAdmin = &emptyString
+		case PanoramaAdmin:
+			ans.PanoramaAdmin = &true
+		default:
+			break
 		}
-	} else if e.Type == "custom" {
-		ans.CustomProfile = e.Role
+	case Custom:
+		ans.CustomProfile = &e.Role
+	default:
+		break
 	}
 
 	return ans
