@@ -77,8 +77,6 @@ func (c *Panorama) pather(tmpl string) namespace.Pather {
 func (c *Panorama) xpath(tmpl string, vals []string) ([]string, error) {
 	var ans []string
 
-	// Commands > devices > entry[@name='localhost.localdomain'] > template > entry[@name='t-common-base'] > config > mgt-config
-
 	if tmpl != "" {
 		ans = make([]string, 0, 12)
 		ans = append(ans, util.TemplateXpathPrefix(tmpl, "")...)
