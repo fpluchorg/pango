@@ -10,8 +10,6 @@ import (
 	"strings"
 )
 
-const EmptyString = ""
-
 // VsysEntryType defines an entry config node with vsys entries underneath.
 type VsysEntryType struct {
 	Entries []VsysEntry `xml:"entry"`
