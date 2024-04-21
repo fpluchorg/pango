@@ -3,7 +3,6 @@ package user
 import (
 	"encoding/xml"
 	"github.com/fpluchorg/pango/util"
-
 	"github.com/fpluchorg/pango/version"
 )
 
@@ -80,39 +79,42 @@ func (o *entry_v1) normalize() Entry {
 	}
 
 	var (
-		superUser     string
-		superReader   string
-		panoramaAdmin string
-		deviceAdmin   string
-		deviceReader  string
+		superUser     *string
+		superReader   *string
+		panoramaAdmin *string
+		deviceAdmin   *string
+		deviceReader  *string
 	)
 	if o.SuperUser != nil && *o.SuperUser == util.YesNo(true) {
-		superUser = *o.SuperUser
+		superUser = o.SuperUser
 	}
 	if o.SuperReader != nil && *o.SuperReader == util.YesNo(true) {
-		superReader = *o.SuperReader
+		superReader = o.SuperReader
 	}
-	if o.DeviceAdmin != nil && *o.DeviceAdmin == util.YesNo(true) {
-		deviceAdmin = *o.DeviceAdmin
+	if o.DeviceAdmin != nil && *o.DeviceAdmin == util.EmptyString {
+		deviceAdmin = o.DeviceAdmin
 	}
-	if o.DeviceReader != nil && *o.DeviceReader == util.YesNo(true) {
-		deviceReader = *o.DeviceReader
+	if o.DeviceReader != nil && *o.DeviceReader == util.EmptyString {
+		deviceReader = o.DeviceReader
 	}
 	if o.PanoramaAdmin != nil && *o.PanoramaAdmin == util.YesNo(true) {
-		panoramaAdmin = *o.PanoramaAdmin
+		panoramaAdmin = o.PanoramaAdmin
 	}
-
-	if superUser == util.YesNo(true) || superReader == util.YesNo(true) || deviceAdmin == util.YesNo(true) || deviceReader == util.YesNo(true) || panoramaAdmin == util.YesNo(true) {
+	if (superUser != nil && *superUser == util.YesNo(true)) ||
+		(superReader != nil && *superReader == util.YesNo(true)) ||
+		(deviceAdmin != nil && *deviceAdmin == util.EmptyString) ||
+		(deviceReader != nil && *deviceReader == util.EmptyString) ||
+		(panoramaAdmin != nil && *panoramaAdmin == util.YesNo(true)) {
 		ans.Type = Dynamic
-		if superUser == util.YesNo(true) {
+		if superUser != nil && *superUser == util.YesNo(true) {
 			ans.Role = SuperUser
-		} else if superReader == util.YesNo(true) {
+		} else if superReader != nil && *superReader == util.YesNo(true) {
 			ans.Role = SuperReader
-		} else if deviceAdmin == util.YesNo(true) {
+		} else if deviceAdmin != nil && *deviceAdmin == util.EmptyString {
 			ans.Role = DeviceAdmin
-		} else if deviceReader == util.YesNo(true) {
+		} else if deviceReader != nil && *deviceReader == util.EmptyString {
 			ans.Role = DeviceReader
-		} else if panoramaAdmin == util.YesNo(true) {
+		} else if panoramaAdmin != nil && *panoramaAdmin == util.YesNo(true) {
 			ans.Role = PanoramaAdmin
 		} else {
 			ans.Role = "ERROR"
@@ -148,22 +150,22 @@ func specify_v1(e Entry) interface{} {
 		ans.PublicKey = &e.PublicKey
 	}
 
-	true := util.YesNo(true)
+	yes := util.YesNo(true)
 	emptyString := util.EmptyString
 
 	switch e.Type {
 	case Dynamic:
 		switch e.Role {
 		case SuperUser:
-			ans.SuperUser = &true
+			ans.SuperUser = &yes
 		case SuperReader:
-			ans.SuperReader = &true
+			ans.SuperReader = &yes
 		case DeviceReader:
 			ans.DeviceReader = &emptyString
 		case DeviceAdmin:
 			ans.DeviceAdmin = &emptyString
 		case PanoramaAdmin:
-			ans.PanoramaAdmin = &true
+			ans.PanoramaAdmin = &yes
 		default:
 			break
 		}
