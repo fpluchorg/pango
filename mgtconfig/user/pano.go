@@ -61,7 +61,6 @@ func (c *Panorama) Edit(tmpl string, e Entry) error {
 }
 
 // Delete performs DELETE to remove the specified objects.
-//
 // Objects can be either a string or an Entry object.
 func (c *Panorama) Delete(tmpl string, e ...interface{}) error {
 	names, nErr := toNames(e)
