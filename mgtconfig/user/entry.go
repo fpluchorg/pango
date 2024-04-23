@@ -7,13 +7,14 @@ import (
 )
 
 const (
-	Custom       = "custom"
-	DeviceAdmin  = "deviceadmin"
-	DeviceReader = "devicereader"
-	Dynamic      = "dynamic"
-	Error        = "ERROR"
-	SuperReader  = "superreader"
-	SuperUser    = "superuser"
+	Custom        = "custom"
+	DeviceAdmin   = "deviceadmin"
+	DeviceReader  = "devicereader"
+	Dynamic       = "dynamic"
+	Error         = "ERROR"
+	PanoramaAdmin = "panorama-admin"
+	SuperReader   = "superreader"
+	SuperUser     = "superuser"
 )
 
 // Entry is a normalized, version independent representation of a device group.
@@ -79,10 +80,11 @@ func (o *entry_v1) normalize() Entry {
 	}
 
 	var (
-		superUser    *string
-		superReader  *string
-		deviceAdmin  *string
-		deviceReader *string
+		superUser     *string
+		superReader   *string
+		panoramaAdmin *string
+		deviceAdmin   *string
+		deviceReader  *string
 	)
 	if o.SuperUser != nil && *o.SuperUser == util.YesNo(true) {
 		superUser = o.SuperUser
@@ -96,10 +98,14 @@ func (o *entry_v1) normalize() Entry {
 	if o.DeviceReader != nil && *o.DeviceReader == util.EmptyString {
 		deviceReader = o.DeviceReader
 	}
+	if o.PanoramaAdmin != nil && *o.PanoramaAdmin == util.YesNo(true) {
+		panoramaAdmin = o.PanoramaAdmin
+	}
 	if (superUser != nil && *superUser == util.YesNo(true)) ||
 		(superReader != nil && *superReader == util.YesNo(true)) ||
 		(deviceAdmin != nil && *deviceAdmin == util.EmptyString) ||
-		(deviceReader != nil && *deviceReader == util.EmptyString) {
+		(deviceReader != nil && *deviceReader == util.EmptyString) ||
+		(panoramaAdmin != nil && *panoramaAdmin == util.YesNo(true)) {
 		ans.Type = Dynamic
 		if superUser != nil && *superUser == util.YesNo(true) {
 			ans.Role = SuperUser
@@ -109,6 +115,8 @@ func (o *entry_v1) normalize() Entry {
 			ans.Role = DeviceAdmin
 		} else if deviceReader != nil && *deviceReader == util.EmptyString {
 			ans.Role = DeviceReader
+		} else if panoramaAdmin != nil && *panoramaAdmin == util.YesNo(true) {
+			ans.Role = PanoramaAdmin
 		} else {
 			ans.Role = Error
 		}
@@ -129,6 +137,7 @@ type entry_v1 struct {
 	SuperReader   *string  `xml:"permissions>role-based>superreader"`
 	DeviceReader  *string  `xml:"permissions>role-based>devicereader"`
 	DeviceAdmin   *string  `xml:"permissions>role-based>deviceadmin"`
+	PanoramaAdmin *string  `xml:"permissions>role-based>panorama-admin"`
 	CustomProfile *string  `xml:"permissions>role-based>custom>profile"`
 }
 
@@ -156,6 +165,8 @@ func specify_v1(e Entry) interface{} {
 			ans.DeviceReader = &emptyString
 		case DeviceAdmin:
 			ans.DeviceAdmin = &emptyString
+		case PanoramaAdmin:
+			ans.PanoramaAdmin = &yes
 		default:
 			break
 		}
