@@ -78,7 +78,7 @@ func (c *Panorama) xpath(tmpl string, vals []string) ([]string, error) {
 
 	if tmpl != "" {
 		ans = make([]string, 0, 12)
-		ans = append(ans, util.TemplateXpathPrefix(tmpl, "")...)
+		ans = append(ans, util.TemplateXpathPrefix(tmpl, util.EmptyString)...)
 	} else {
 		ans = make([]string, 0, 4)
 	}
