@@ -131,14 +131,14 @@ func (o *entry_v1) normalize() Entry {
 type entry_v1 struct {
 	XMLName       xml.Name `xml:"entry"`
 	Name          string   `xml:"name,attr"`
-	PasswordHash  string   `xml:"phash,omitempty"`
-	PublicKey     *string  `xml:"public-key,omitempty"`
-	SuperUser     *string  `xml:"permissions>role-based>superuser"`
-	SuperReader   *string  `xml:"permissions>role-based>superreader"`
-	DeviceReader  *string  `xml:"permissions>role-based>devicereader"`
-	DeviceAdmin   *string  `xml:"permissions>role-based>deviceadmin"`
-	PanoramaAdmin *string  `xml:"permissions>role-based>panorama-admin"`
-	CustomProfile *string  `xml:"permissions>role-based>custom>profile"`
+	PasswordHash  string   `xml:"phash"`
+	PublicKey     *string  `xml:"public-key"`
+	SuperUser     *string  `xml:"permissions>role-based>superuser,omitempty"`
+	SuperReader   *string  `xml:"permissions>role-based>superreader,omitempty"`
+	DeviceReader  *string  `xml:"permissions>role-based>devicereader,omitempty"`
+	DeviceAdmin   *string  `xml:"permissions>role-based>deviceadmin,omitempty"`
+	PanoramaAdmin *string  `xml:"permissions>role-based>panorama-admin,omitempty"`
+	CustomProfile *string  `xml:"permissions>role-based>custom>profile,omitempty"`
 }
 
 func specify_v1(e Entry) interface{} {
