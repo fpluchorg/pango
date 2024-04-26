@@ -93,6 +93,7 @@ func (c *MockClient) Set(path, elm, extras, ans interface{}) ([]byte, error) {
 	if err := c.SetElm(elm); err != nil {
 		return nil, err
 	}
+	c.Elm = util.RefactorElement(c.Elm)
 	c.Path = util.AsXpath(path)
 	c.Extras = extras
 
