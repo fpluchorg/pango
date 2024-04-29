@@ -7,11 +7,11 @@ import (
 
 // Firewall is the client.MGTConfig namespace.
 type Firewall struct {
-	PasswordComplexity *passwordcomplexity.Panorama
+	PasswordComplexity *passwordcomplexity.Firewall
 }
 
 func FirewallNamespace(x util.XapiClient) *Firewall {
 	return &Firewall{
-		PasswordComplexity: passwordcomplexity.PanoramaNamespace(x),
+		PasswordComplexity: passwordcomplexity.FirewallNamespace(x),
 	}
 }

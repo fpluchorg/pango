@@ -2,6 +2,7 @@ package pango
 
 import (
 	"encoding/xml"
+	"github.com/fpluchorg/pango/mgtconfig"
 
 	"github.com/fpluchorg/pango/version"
 
@@ -22,18 +23,19 @@ import (
 // Initialize() to prepare it for use.
 //
 // It has the following namespaces:
-//      * Predefined
-//      * Network
-//      * Device
-//      * Policies
-//      * Objects
-//      * Licensing
-//      * UserId
+//   - Predefined
+//   - Network
+//   - Device
+//   - Policies
+//   - Objects
+//   - Licensing
+//   - UserId
 type Firewall struct {
 	Client
 
 	// Namespaces
 	Predefined  *predefined.Firewall
+	MGTConfig   *mgtconfig.Firewall
 	Network     *netw.Firewall
 	Device      *dev.Firewall
 	Policies    *poli.Firewall
@@ -50,10 +52,10 @@ type Firewall struct {
 // client's SystemInfo map.
 //
 // If not specified, the following is assumed:
-//  * Protocol: https
-//  * Port: (unspecified)
-//  * Timeout: 10
-//  * Logging: LogAction | LogUid
+//   - Protocol: https
+//   - Port: (unspecified)
+//   - Timeout: 10
+//   - Logging: LogAction | LogUid
 func (c *Firewall) Initialize() error {
 	if len(c.rb) == 0 {
 		var e error
@@ -153,6 +155,8 @@ func (c *Firewall) GetDhcpInfo(i string) (map[string]string, error) {
 
 func (c *Firewall) initNamespaces() {
 	c.Predefined = predefined.FirewallNamespace(c)
+
+	c.MGTConfig = mgtconfig.FirewallNamespace(c)
 
 	c.Network = netw.FirewallNamespace(c)
 

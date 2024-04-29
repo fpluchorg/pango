@@ -113,42 +113,45 @@ func (o *entry_v1) normalize() Entry {
 		ans.PasswordChangePeriodBlock = *o.PasswordChangePeriodBlock
 	}
 
-	if o.ExpirationPeriod != nil {
-		ans.ExpirationPeriod = *o.ExpirationPeriod
+	if o.PasswordChange.ExpirationPeriod != nil {
+		ans.ExpirationPeriod = *o.PasswordChange.ExpirationPeriod
 	}
 
-	if o.ExpirationWarningPeriod != nil {
-		ans.ExpirationWarningPeriod = *o.ExpirationWarningPeriod
+	if o.PasswordChange.ExpirationWarningPeriod != nil {
+		ans.ExpirationWarningPeriod = *o.PasswordChange.ExpirationWarningPeriod
 	}
 
-	if o.PostExpirationAdminLoginCount != nil {
-		ans.PostExpirationAdminLoginCount = *o.PostExpirationAdminLoginCount
+	if o.PasswordChange.PostExpirationAdminLoginCount != nil {
+		ans.PostExpirationAdminLoginCount = *o.PasswordChange.PostExpirationAdminLoginCount
 	}
 
-	if o.PostExpirationGracePeriod != nil {
-		ans.PostExpirationGracePeriod = *o.PostExpirationGracePeriod
+	if o.PasswordChange.PostExpirationGracePeriod != nil {
+		ans.PostExpirationGracePeriod = *o.PasswordChange.PostExpirationGracePeriod
 	}
 
 	return ans
 }
 
 type entry_v1 struct {
-	MinimumLength                  *int    `xml:"minimum-length"`
-	Enabled                        *string `xml:"enabled"`
-	MinimumUppercaseLetters        *int    `xml:"minimum-uppercase-letters"`
-	MinimumLowercaseLetters        *int    `xml:"minimum-lowercase-letters"`
-	MinimumNumericLetters          *int    `xml:"minimum-numeric-letters"`
-	MinimumSpecialCharacters       *int    `xml:"minimum-special-characters"`
-	BlockRepeatedCharacters        *int    `xml:"block-repeated-characters"`
-	BlockUsernameInclusion         *string `xml:"block-username-inclusion"`
-	NewPasswordDiffersByCharacters *int    `xml:"new-password-differs-by-characters"`
-	PasswordChangeOnFirstLogin     *string `xml:"password-change-on-first-login"`
-	PasswordHistoryCount           *int    `xml:"password-history-count"`
-	PasswordChangePeriodBlock      *int    `xml:"password-change-period-block"`
-	ExpirationPeriod               *int    `xml:"password-change>expiration-period,omitempty"`
-	ExpirationWarningPeriod        *int    `xml:"password-change>expiration-warning-period,omitempty"`
-	PostExpirationAdminLoginCount  *int    `xml:"password-change>post-expiration-admin-login-count,omitempty"`
-	PostExpirationGracePeriod      *int    `xml:"password-change>post-expiration-grace-period,omitempty"`
+	MinimumLength                  *int            `xml:"minimum-length"`
+	Enabled                        *string         `xml:"enabled"`
+	MinimumUppercaseLetters        *int            `xml:"minimum-uppercase-letters"`
+	MinimumLowercaseLetters        *int            `xml:"minimum-lowercase-letters"`
+	MinimumNumericLetters          *int            `xml:"minimum-numeric-letters"`
+	MinimumSpecialCharacters       *int            `xml:"minimum-special-characters"`
+	BlockRepeatedCharacters        *int            `xml:"block-repeated-characters"`
+	BlockUsernameInclusion         *string         `xml:"block-username-inclusion"`
+	NewPasswordDiffersByCharacters *int            `xml:"new-password-differs-by-characters"`
+	PasswordChangeOnFirstLogin     *string         `xml:"password-change-on-first-login"`
+	PasswordHistoryCount           *int            `xml:"password-history-count"`
+	PasswordChangePeriodBlock      *int            `xml:"password-change-period-block"`
+	PasswordChange                 *passwordChange `xml:"password-change,omitempty"`
+}
+type passwordChange struct {
+	ExpirationPeriod              *int `xml:"expiration-period"`
+	ExpirationWarningPeriod       *int `xml:"expiration-warning-period"`
+	PostExpirationAdminLoginCount *int `xml:"post-expiration-admin-login-count"`
+	PostExpirationGracePeriod     *int `xml:"post-expiration-grace-period"`
 }
 
 func specify_v1(e Entry) interface{} {
@@ -162,13 +165,17 @@ func specify_v1(e Entry) interface{} {
 		NewPasswordDiffersByCharacters: &e.NewPasswordDiffersByCharacters,
 		PasswordHistoryCount:           &e.PasswordHistoryCount,
 		PasswordChangePeriodBlock:      &e.PasswordChangePeriodBlock,
-		ExpirationPeriod:               &e.ExpirationPeriod,
-		ExpirationWarningPeriod:        &e.ExpirationWarningPeriod,
-		PostExpirationAdminLoginCount:  &e.PostExpirationAdminLoginCount,
-		PostExpirationGracePeriod:      &e.PostExpirationGracePeriod,
 		Enabled:                        boolStringToYesNo(e.Enabled),
 		BlockUsernameInclusion:         boolStringToYesNo(e.BlockUsernameInclusion),
 		PasswordChangeOnFirstLogin:     boolStringToYesNo(e.PasswordChangeOnFirstLogin),
+	}
+	if ans.PasswordChange == nil {
+		ans.PasswordChange = &passwordChange{
+			ExpirationPeriod:              &e.ExpirationPeriod,
+			ExpirationWarningPeriod:       &e.ExpirationWarningPeriod,
+			PostExpirationAdminLoginCount: &e.PostExpirationAdminLoginCount,
+			PostExpirationGracePeriod:     &e.PostExpirationGracePeriod,
+		}
 	}
 
 	return ans
