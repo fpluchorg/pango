@@ -2,7 +2,6 @@ package general
 
 import (
 	"encoding/xml"
-
 	"github.com/fpluchorg/pango/util"
 	"github.com/fpluchorg/pango/version"
 )
@@ -10,6 +9,7 @@ import (
 // Config is a normalized, version independent representation of a device's
 // general settings.
 type Config struct {
+	Template              string
 	Hostname              string
 	IpAddress             string
 	Netmask               string
@@ -58,6 +58,10 @@ func (o *Config) Defaults() {
 //   - Netmask
 //   - Gateway
 func (o *Config) Merge(s Config) {
+	if s.Template != "" {
+		o.Template = s.Template
+	}
+
 	if s.Hostname != "" {
 		o.Hostname = s.Hostname
 	}

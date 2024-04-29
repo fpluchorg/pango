@@ -1,8 +1,6 @@
 package general
 
 import (
-	"fmt"
-
 	"github.com/fpluchorg/pango/namespace"
 	"github.com/fpluchorg/pango/util"
 )
@@ -15,14 +13,14 @@ type Panorama struct {
 // Get performs GET to retrieve the device's general settings.
 func (c *Panorama) Get(tmpl, ts, vsys string) (Config, error) {
 	ans := c.container()
-	err := c.ns.Object(util.Get, c.pather(tmpl, ts, vsys), "", ans)
+	err := c.ns.Object(util.Get, c.pather(tmpl, ts, vsys), util.EmptyString, ans)
 	return first(ans, err)
 }
 
 // Show performs SHOW to retrieve the device's general settings.
 func (c *Panorama) Show(tmpl, ts, vsys string) (Config, error) {
 	ans := c.container()
-	err := c.ns.Object(util.Show, c.pather(tmpl, ts, vsys), "", ans)
+	err := c.ns.Object(util.Show, c.pather(tmpl, ts, vsys), util.EmptyString, ans)
 	return first(ans, err)
 }
 
@@ -43,12 +41,11 @@ func (c *Panorama) pather(tmpl, ts, vsys string) namespace.Pather {
 }
 
 func (c *Panorama) xpath(tmpl, ts, vsys string) ([]string, error) {
-	if tmpl == "" && ts == "" {
-		return nil, fmt.Errorf("tmpl or ts must be specified")
-	}
 
 	ans := make([]string, 0, 12)
-	ans = append(ans, util.TemplateXpathPrefix(tmpl, ts)...)
+	if tmpl != util.EmptyString {
+		ans = append(ans, util.TemplateXpathPrefix(tmpl, ts)...)
+	}
 	ans = append(ans,
 		"config",
 		"devices",
