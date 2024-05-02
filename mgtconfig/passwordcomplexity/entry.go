@@ -3,21 +3,20 @@ package passwordcomplexity
 import (
 	"github.com/fpluchorg/pango/util"
 	"github.com/fpluchorg/pango/version"
-	"strconv"
 )
 
 // Entry is a normalized, version independent representation of a password complexity.
 type Entry struct {
 	MinimumLength                  int
-	Enabled                        string
+	Enabled                        bool
 	MinimumUppercaseLetters        int
 	MinimumLowercaseLetters        int
 	MinimumNumericLetters          int
 	MinimumSpecialCharacters       int
 	BlockRepeatedCharacters        int
-	BlockUsernameInclusion         string
+	BlockUsernameInclusion         bool
 	NewPasswordDiffersByCharacters int
-	PasswordChangeOnFirstLogin     string
+	PasswordChangeOnFirstLogin     bool
 	PasswordHistoryCount           int
 	PasswordChangePeriodBlock      int
 	ExpirationPeriod               int
@@ -70,7 +69,7 @@ func (o *entry_v1) normalize() Entry {
 	}
 
 	if o.Enabled != nil {
-		ans.Enabled = strconv.FormatBool(util.AsBool(*o.Enabled))
+		ans.Enabled = util.AsBool(*o.Enabled)
 	}
 
 	if o.MinimumUppercaseLetters != nil {
@@ -94,7 +93,7 @@ func (o *entry_v1) normalize() Entry {
 	}
 
 	if o.BlockUsernameInclusion != nil {
-		ans.BlockUsernameInclusion = strconv.FormatBool(util.AsBool(*o.BlockUsernameInclusion))
+		ans.BlockUsernameInclusion = util.AsBool(*o.BlockUsernameInclusion)
 	}
 
 	if o.NewPasswordDiffersByCharacters != nil {
@@ -102,7 +101,7 @@ func (o *entry_v1) normalize() Entry {
 	}
 
 	if o.PasswordChangeOnFirstLogin != nil {
-		ans.PasswordChangeOnFirstLogin = strconv.FormatBool(util.AsBool(*o.PasswordChangeOnFirstLogin))
+		ans.PasswordChangeOnFirstLogin = util.AsBool(*o.PasswordChangeOnFirstLogin)
 	}
 
 	if o.PasswordHistoryCount != nil {
@@ -133,25 +132,25 @@ func (o *entry_v1) normalize() Entry {
 }
 
 type entry_v1 struct {
-	MinimumLength                  *int            `xml:"minimum-length"`
-	Enabled                        *string         `xml:"enabled"`
-	MinimumUppercaseLetters        *int            `xml:"minimum-uppercase-letters"`
-	MinimumLowercaseLetters        *int            `xml:"minimum-lowercase-letters"`
-	MinimumNumericLetters          *int            `xml:"minimum-numeric-letters"`
-	MinimumSpecialCharacters       *int            `xml:"minimum-special-characters"`
-	BlockRepeatedCharacters        *int            `xml:"block-repeated-characters"`
-	BlockUsernameInclusion         *string         `xml:"block-username-inclusion"`
-	NewPasswordDiffersByCharacters *int            `xml:"new-password-differs-by-characters"`
-	PasswordChangeOnFirstLogin     *string         `xml:"password-change-on-first-login"`
-	PasswordHistoryCount           *int            `xml:"password-history-count"`
-	PasswordChangePeriodBlock      *int            `xml:"password-change-period-block"`
-	PasswordChange                 *passwordChange `xml:"password-change,omitempty"`
+	MinimumLength                  *int            `xml:"minimum-length,omitempty"`
+	Enabled                        *string         `xml:"enabled,omitempty"`
+	MinimumUppercaseLetters        *int            `xml:"minimum-uppercase-letters,omitempty"`
+	MinimumLowercaseLetters        *int            `xml:"minimum-lowercase-letters,omitempty"`
+	MinimumNumericLetters          *int            `xml:"minimum-numeric-letters,omitempty"`
+	MinimumSpecialCharacters       *int            `xml:"minimum-special-characters,omitempty"`
+	BlockRepeatedCharacters        *int            `xml:"block-repeated-characters,omitempty"`
+	BlockUsernameInclusion         *string         `xml:"block-username-inclusion,omitempty"`
+	NewPasswordDiffersByCharacters *int            `xml:"new-password-differs-by-characters,omitempty"`
+	PasswordChangeOnFirstLogin     *string         `xml:"password-change-on-first-login,omitempty"`
+	PasswordHistoryCount           *int            `xml:"password-history-count,omitempty"`
+	PasswordChangePeriodBlock      *int            `xml:"password-change-period-block,omitempty"`
+	PasswordChange                 *passwordChange `xml:"password-change"`
 }
 type passwordChange struct {
-	ExpirationPeriod              *int `xml:"expiration-period"`
-	ExpirationWarningPeriod       *int `xml:"expiration-warning-period"`
-	PostExpirationAdminLoginCount *int `xml:"post-expiration-admin-login-count"`
-	PostExpirationGracePeriod     *int `xml:"post-expiration-grace-period"`
+	ExpirationPeriod              *int `xml:"expiration-period,omitempty"`
+	ExpirationWarningPeriod       *int `xml:"expiration-warning-period,omitempty"`
+	PostExpirationAdminLoginCount *int `xml:"post-expiration-admin-login-count,omitempty"`
+	PostExpirationGracePeriod     *int `xml:"post-expiration-grace-period,omitempty"`
 }
 
 func specify_v1(e Entry) interface{} {
@@ -165,10 +164,17 @@ func specify_v1(e Entry) interface{} {
 		NewPasswordDiffersByCharacters: &e.NewPasswordDiffersByCharacters,
 		PasswordHistoryCount:           &e.PasswordHistoryCount,
 		PasswordChangePeriodBlock:      &e.PasswordChangePeriodBlock,
-		Enabled:                        boolStringToYesNo(e.Enabled),
-		BlockUsernameInclusion:         boolStringToYesNo(e.BlockUsernameInclusion),
-		PasswordChangeOnFirstLogin:     boolStringToYesNo(e.PasswordChangeOnFirstLogin),
 	}
+
+	enabled := util.YesNo(e.Enabled)
+	ans.Enabled = &enabled
+
+	blockUsernameInclusion := util.YesNo(e.BlockUsernameInclusion)
+	ans.BlockUsernameInclusion = &blockUsernameInclusion
+
+	passwordChangeOnFirstLogin := util.YesNo(e.PasswordChangeOnFirstLogin)
+	ans.PasswordChangeOnFirstLogin = &passwordChangeOnFirstLogin
+
 	if ans.PasswordChange == nil {
 		ans.PasswordChange = &passwordChange{
 			ExpirationPeriod:              &e.ExpirationPeriod,
@@ -179,16 +185,4 @@ func specify_v1(e Entry) interface{} {
 	}
 
 	return ans
-}
-
-func boolStringToYesNo(str string) *string {
-	if str == util.EmptyString {
-		str = "false"
-	}
-	boolValue, err := strconv.ParseBool(str)
-	if err != nil {
-		panic(err)
-	}
-	boolString := util.YesNo(boolValue)
-	return &boolString
 }
