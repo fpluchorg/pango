@@ -9,6 +9,7 @@ import (
 	// Various namespace imports.
 	"github.com/fpluchorg/pango/dev"
 	"github.com/fpluchorg/pango/licen"
+	"github.com/fpluchorg/pango/mgtconfig"
 	"github.com/fpluchorg/pango/netw"
 	"github.com/fpluchorg/pango/objs"
 	"github.com/fpluchorg/pango/panosplugin"
@@ -24,6 +25,7 @@ import (
 //
 // It has the following namespaces:
 //   - Predefined
+//   - MGTConfig
 //   - Network
 //   - Device
 //   - Policies
