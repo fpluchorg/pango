@@ -2,7 +2,6 @@ package pango
 
 import (
 	"encoding/xml"
-	"github.com/fpluchorg/pango/mgtconfig"
 
 	"github.com/fpluchorg/pango/version"
 
