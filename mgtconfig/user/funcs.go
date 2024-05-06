@@ -73,3 +73,16 @@ func PanoramaNamespace(client util.XapiClient) *Panorama {
 		},
 	}
 }
+
+// FirewallNamespace returns an initialized namespace.
+func FirewallNamespace(client util.XapiClient) *Firewall {
+	return &Firewall{
+		ns: &namespace.Standard{
+			Common: namespace.Common{
+				Singular: singular,
+				Plural:   plural,
+				Client:   client,
+			},
+		},
+	}
+}
