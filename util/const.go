@@ -41,4 +41,5 @@ const PanosTimeWithoutTimezoneFormat = "2006/01/02 15:04:05"
 // Values of general application constants
 const (
 	EmptyString = ""
+	EntryV1     = "entry_v1"
 )

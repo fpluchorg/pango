@@ -316,3 +316,12 @@ func ValidateRulebase(dg, base string) error {
 
 	return nil
 }
+
+// RefactorElement for removing default struct tag name in case it was auto append
+func RefactorElement(str string) string {
+	if str[1:len(EntryV1)+1] == EntryV1 {
+		str = str[len(EntryV1)+2:]
+		str = str[0 : len(str)-len(EntryV1)-3]
+	}
+	return str
+}
