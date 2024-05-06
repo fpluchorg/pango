@@ -2171,7 +2171,7 @@ func asString(i interface{}, attemptMarshal bool) (string, error) {
 		if err != nil {
 			return "", err
 		}
-		return string(rb), nil
+		return util.RefactorElement(string(rb)), nil
 	}
 }
 
