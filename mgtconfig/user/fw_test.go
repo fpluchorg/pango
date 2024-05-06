@@ -7,7 +7,7 @@ import (
 )
 
 func TestFwNormalization(t *testing.T) {
-	testCases := getTests()
+	testCases := getAdministratorsUserTests()
 
 	mc := &testdata.MockClient{}
 	ns := FirewallNamespace(mc)
