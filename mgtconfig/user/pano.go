@@ -61,7 +61,6 @@ func (c *Panorama) Edit(tmpl string, e Entry) error {
 }
 
 // Delete performs DELETE to remove the specified objects.
-//
 // Objects can be either a string or an Entry object.
 func (c *Panorama) Delete(tmpl string, e ...interface{}) error {
 	names, nErr := toNames(e)
@@ -76,8 +75,6 @@ func (c *Panorama) pather(tmpl string) namespace.Pather {
 
 func (c *Panorama) xpath(tmpl string, vals []string) ([]string, error) {
 	var ans []string
-
-	// Commands > devices > entry[@name='localhost.localdomain'] > template > entry[@name='t-common-base'] > config > mgt-config
 
 	if tmpl != "" {
 		ans = make([]string, 0, 12)
