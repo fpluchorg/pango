@@ -68,8 +68,8 @@ func (o *entry_v1) normalize() Entry {
 		ans.MinimumLength = *o.MinimumLength
 	}
 
-	if o.Enabled != nil {
-		ans.Enabled = util.AsBool(*o.Enabled)
+	if o.Enabled != util.EmptyString {
+		ans.Enabled = util.AsBool(o.Enabled)
 	}
 
 	if o.MinimumUppercaseLetters != nil {
@@ -92,16 +92,16 @@ func (o *entry_v1) normalize() Entry {
 		ans.BlockRepeatedCharacters = *o.BlockRepeatedCharacters
 	}
 
-	if o.BlockUsernameInclusion != nil {
-		ans.BlockUsernameInclusion = util.AsBool(*o.BlockUsernameInclusion)
+	if o.BlockUsernameInclusion != util.EmptyString {
+		ans.BlockUsernameInclusion = util.AsBool(o.BlockUsernameInclusion)
 	}
 
 	if o.NewPasswordDiffersByCharacters != nil {
 		ans.NewPasswordDiffersByCharacters = *o.NewPasswordDiffersByCharacters
 	}
 
-	if o.PasswordChangeOnFirstLogin != nil {
-		ans.PasswordChangeOnFirstLogin = util.AsBool(*o.PasswordChangeOnFirstLogin)
+	if o.PasswordChangeOnFirstLogin != util.EmptyString {
+		ans.PasswordChangeOnFirstLogin = util.AsBool(o.PasswordChangeOnFirstLogin)
 	}
 
 	if o.PasswordHistoryCount != nil {
@@ -133,15 +133,15 @@ func (o *entry_v1) normalize() Entry {
 
 type entry_v1 struct {
 	MinimumLength                  *int            `xml:"minimum-length,omitempty"`
-	Enabled                        *string         `xml:"enabled,omitempty"`
+	Enabled                        string          `xml:"enabled,omitempty"`
 	MinimumUppercaseLetters        *int            `xml:"minimum-uppercase-letters,omitempty"`
 	MinimumLowercaseLetters        *int            `xml:"minimum-lowercase-letters,omitempty"`
 	MinimumNumericLetters          *int            `xml:"minimum-numeric-letters,omitempty"`
 	MinimumSpecialCharacters       *int            `xml:"minimum-special-characters,omitempty"`
 	BlockRepeatedCharacters        *int            `xml:"block-repeated-characters,omitempty"`
-	BlockUsernameInclusion         *string         `xml:"block-username-inclusion,omitempty"`
+	BlockUsernameInclusion         string          `xml:"block-username-inclusion,omitempty"`
 	NewPasswordDiffersByCharacters *int            `xml:"new-password-differs-by-characters,omitempty"`
-	PasswordChangeOnFirstLogin     *string         `xml:"password-change-on-first-login,omitempty"`
+	PasswordChangeOnFirstLogin     string          `xml:"password-change-on-first-login,omitempty"`
 	PasswordHistoryCount           *int            `xml:"password-history-count,omitempty"`
 	PasswordChangePeriodBlock      *int            `xml:"password-change-period-block,omitempty"`
 	PasswordChange                 *passwordChange `xml:"password-change"`
@@ -167,13 +167,13 @@ func specify_v1(e Entry) interface{} {
 	}
 
 	enabled := util.YesNo(e.Enabled)
-	ans.Enabled = &enabled
+	ans.Enabled = enabled
 
 	blockUsernameInclusion := util.YesNo(e.BlockUsernameInclusion)
-	ans.BlockUsernameInclusion = &blockUsernameInclusion
+	ans.BlockUsernameInclusion = blockUsernameInclusion
 
 	passwordChangeOnFirstLogin := util.YesNo(e.PasswordChangeOnFirstLogin)
-	ans.PasswordChangeOnFirstLogin = &passwordChangeOnFirstLogin
+	ans.PasswordChangeOnFirstLogin = passwordChangeOnFirstLogin
 
 	if ans.PasswordChange == nil {
 		ans.PasswordChange = &passwordChange{
