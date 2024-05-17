@@ -345,7 +345,7 @@ func (o *config_v1) normalize() Config {
 
 type config_v1 struct {
 	XMLName               xml.Name     `xml:"system"`
-	Hostname              string       `xml:"hostname"`
+	Hostname              string       `xml:"hostname,omitempty"`
 	IpAddress             string       `xml:"ip-address,omitempty"`
 	Netmask               string       `xml:"netmask,omitempty"`
 	Gateway               string       `xml:"default-gateway,omitempty"`
@@ -771,7 +771,7 @@ func (o *config_v2) normalize() Config {
 
 type config_v2 struct {
 	XMLName               xml.Name     `xml:"system"`
-	Hostname              string       `xml:"hostname"`
+	Hostname              string       `xml:"hostname,omitempty"`
 	IpAddress             string       `xml:"ip-address,omitempty"`
 	Netmask               string       `xml:"netmask,omitempty"`
 	Gateway               string       `xml:"default-gateway,omitempty"`
