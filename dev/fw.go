@@ -1,6 +1,7 @@
 package dev
 
 import (
+	"github.com/fpluchorg/pango/dev/settingmanagement"
 	"github.com/fpluchorg/pango/util"
 
 	cert "github.com/fpluchorg/pango/dev/certificate"
@@ -44,6 +45,7 @@ type Firewall struct {
 	LocalUserDbUser       *user.Firewall
 	RadiusProfile         *radius.Firewall
 	SamlProfile           *saml.Firewall
+	SettingManagement     *settingmanagement.Firewall
 	SslDecrypt            *ssldecrypt.Firewall
 	SslTlsServiceProfile  *ssltls.Firewall
 	SnmpServerProfile     *snmp.Firewall
@@ -70,6 +72,7 @@ func FirewallNamespace(x util.XapiClient) *Firewall {
 		LocalUserDbUser:       user.FirewallNamespace(x),
 		RadiusProfile:         radius.FirewallNamespace(x),
 		SamlProfile:           saml.FirewallNamespace(x),
+		SettingManagement:     settingmanagement.FirewallNamespace(x),
 		SslTlsServiceProfile:  ssltls.FirewallNamespace(x),
 		SslDecrypt:            ssldecrypt.FirewallNamespace(x),
 		SnmpServerProfile:     snmp.FirewallNamespace(x),

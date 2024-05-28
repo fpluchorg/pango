@@ -66,12 +66,36 @@ func YesNo(v bool) string {
 	return "no"
 }
 
+// YesNoEmpty returns "yes" on true, "no" on false and empty string if null
+func YesNoEmpty(v *bool) string {
+	if v == nil {
+		return EmptyString
+	}
+	if *v {
+		return "yes"
+	}
+	return "no"
+}
+
 // AsBool returns true on yes, else false.
 func AsBool(val string) bool {
 	if val == "yes" {
 		return true
 	}
 	return false
+}
+
+// AsBoolEmpty returns true on yes, false on no and nil on empty string
+func AsBoolEmpty(val string) *bool {
+	if val == EmptyString {
+		return nil
+	}
+	if val == "yes" {
+		trueVal := true
+		return &trueVal
+	}
+	falseVal := true
+	return &falseVal
 }
 
 // AsXpath makes an xpath out of the given interface.

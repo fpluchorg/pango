@@ -1,6 +1,7 @@
 package dev
 
 import (
+	"github.com/fpluchorg/pango/dev/settingmanagement"
 	"github.com/fpluchorg/pango/util"
 
 	cert "github.com/fpluchorg/pango/dev/certificate"
@@ -43,6 +44,7 @@ type Panorama struct {
 	LocalUserDbUser       *user.Panorama
 	RadiusProfile         *radius.Panorama
 	SamlProfile           *saml.Panorama
+	SettingManagement     *settingmanagement.Panorama
 	SslTlsServiceProfile  *ssltls.Panorama
 	SslDecrypt            *ssldecrypt.Panorama
 	SnmpServerProfile     *snmp.Panorama
@@ -69,6 +71,7 @@ func PanoramaNamespace(x util.XapiClient) *Panorama {
 		LocalUserDbUser:       user.PanoramaNamespace(x),
 		RadiusProfile:         radius.PanoramaNamespace(x),
 		SamlProfile:           saml.PanoramaNamespace(x),
+		SettingManagement:     settingmanagement.PanoramaNamespace(x),
 		SslTlsServiceProfile:  ssltls.PanoramaNamespace(x),
 		SslDecrypt:            ssldecrypt.PanoramaNamespace(x),
 		SnmpServerProfile:     snmp.PanoramaNamespace(x),
