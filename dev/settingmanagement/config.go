@@ -40,6 +40,7 @@ func (o *Config) Merge(s Config) {
 	o.FailedAttempts = s.FailedAttempts
 	o.LockoutTime = s.LockoutTime
 	o.MaxSessionCount = s.MaxSessionCount
+	o.MaxSessionTime = s.MaxSessionTime
 	o.IdleTimeout = s.IdleTimeout
 }
 
@@ -114,6 +115,14 @@ func (o *config_v1) normalize() Config {
 		ans.MaxSessionTime = &maxSessionTime
 	}
 
+	if o.IdleTimeout != util.EmptyString {
+		idleTimeout, err := strconv.Atoi(o.IdleTimeout)
+		if err != nil {
+			panic(err)
+		}
+		ans.IdleTimeout = &idleTimeout
+	}
+
 	return ans
 }
 
@@ -124,8 +133,10 @@ type config_v1 struct {
 	SupportUtf8ForLogOutput      string        `xml:"support-utf8-for-log-output,omitempty"`
 	TrafficStopOnLogdbFull       string        `xml:"traffic-stop-on-logdb-full,omitempty"`
 	HostnameTypeInSyslog         string        `xml:"hostname-type-in-syslog,omitempty"`
+	IdleTimeout                  string        `xml:"idle-timeout,omitempty"`
 	AdminLockout                 *adminLockout `xml:"admin-lockout"`
 	AdminSession                 *adminSession `xml:"admin-session"`
+	StoragePartition             string        `xml:"storage-partition>internal"`
 }
 
 type adminLockout struct {
@@ -144,21 +155,35 @@ func specify_v1(c Config) interface{} {
 		EnableHighSpeedLogForwarding: util.YesNoEmpty(c.EnableHighSpeedLogForwarding),
 		SupportUtf8ForLogOutput:      util.YesNoEmpty(c.SupportUtf8ForLogOutput),
 		TrafficStopOnLogdbFull:       util.YesNoEmpty(c.TrafficStopOnLogdbFull),
+		HostnameTypeInSyslog:         c.HostnameTypeInSyslog,
+	}
+	if c.FailedAttempts != nil || c.LockoutTime != nil {
+		ans.AdminLockout = &adminLockout{}
+		if c.FailedAttempts != nil {
+			failedAttempts := *c.FailedAttempts
+			ans.AdminLockout.FailedAttempts = strconv.Itoa(failedAttempts)
+		}
+		if c.LockoutTime != nil {
+			lockoutTime := *c.LockoutTime
+			ans.AdminLockout.LockoutTime = strconv.Itoa(lockoutTime)
+		}
 	}
 
-	failedAttempts := *c.FailedAttempts
-	lockoutTime := *c.LockoutTime
-	ans.AdminLockout = &adminLockout{
-		FailedAttempts: strconv.Itoa(failedAttempts),
-		LockoutTime:    strconv.Itoa(lockoutTime),
+	if c.MaxSessionTime != nil || c.MaxSessionCount != nil {
+		ans.AdminSession = &adminSession{}
+		if c.MaxSessionTime != nil {
+			ans.AdminSession.MaxSessionTime = strconv.Itoa(*c.MaxSessionTime)
+
+		}
+		if c.MaxSessionCount != nil {
+			ans.AdminSession.MaxSessionCount = strconv.Itoa(*c.MaxSessionCount)
+		}
 	}
 
-	maxSessionTime := *c.MaxSessionTime
-	maxSessionCount := *c.MaxSessionCount
-	ans.AdminSession = &adminSession{
-		MaxSessionTime:  strconv.Itoa(maxSessionTime),
-		MaxSessionCount: strconv.Itoa(maxSessionCount),
+	if c.IdleTimeout != nil {
+		ans.IdleTimeout = strconv.Itoa(*c.IdleTimeout)
 	}
+
 	return ans
 }
 
@@ -221,6 +246,14 @@ func (o *config_v2) normalize() Config {
 		ans.MaxSessionTime = &maxSessionTime
 	}
 
+	if o.IdleTimeout != util.EmptyString {
+		idleTimeout, err := strconv.Atoi(o.IdleTimeout)
+		if err != nil {
+			panic(err)
+		}
+		ans.IdleTimeout = &idleTimeout
+	}
+
 	return ans
 }
 
@@ -231,31 +264,47 @@ type config_v2 struct {
 	SupportUtf8ForLogOutput      string        `xml:"support-utf8-for-log-output,omitempty"`
 	TrafficStopOnLogdbFull       string        `xml:"traffic-stop-on-logdb-full,omitempty"`
 	HostnameTypeInSyslog         string        `xml:"hostname-type-in-syslog,omitempty"`
+	IdleTimeout                  string        `xml:"idle-timeout,omitempty"`
 	AdminLockout                 *adminLockout `xml:"admin-lockout"`
 	AdminSession                 *adminSession `xml:"admin-session"`
+	StoragePartition             string        `xml:"storage-partition>internal"`
 }
 
 func specify_v2(c Config) interface{} {
-	ans := config_v1{
+	ans := config_v2{
 		EnableLogHighDpLoad:          util.YesNoEmpty(c.EnableLogHighDpLoad),
 		EnableHighSpeedLogForwarding: util.YesNoEmpty(c.EnableHighSpeedLogForwarding),
 		SupportUtf8ForLogOutput:      util.YesNoEmpty(c.SupportUtf8ForLogOutput),
 		TrafficStopOnLogdbFull:       util.YesNoEmpty(c.TrafficStopOnLogdbFull),
+		HostnameTypeInSyslog:         c.HostnameTypeInSyslog,
+	}
+	if c.FailedAttempts != nil || c.LockoutTime != nil {
+		ans.AdminLockout = &adminLockout{}
+		if c.FailedAttempts != nil {
+			failedAttempts := *c.FailedAttempts
+			ans.AdminLockout.FailedAttempts = strconv.Itoa(failedAttempts)
+		}
+		if c.LockoutTime != nil {
+			lockoutTime := *c.LockoutTime
+			ans.AdminLockout.LockoutTime = strconv.Itoa(lockoutTime)
+		}
 	}
 
-	failedAttempts := *c.FailedAttempts
-	lockoutTime := *c.LockoutTime
-	ans.AdminLockout = &adminLockout{
-		FailedAttempts: strconv.Itoa(failedAttempts),
-		LockoutTime:    strconv.Itoa(lockoutTime),
+	if c.MaxSessionTime != nil || c.MaxSessionCount != nil {
+		ans.AdminSession = &adminSession{}
+		if c.MaxSessionTime != nil {
+			ans.AdminSession.MaxSessionTime = strconv.Itoa(*c.MaxSessionTime)
+
+		}
+		if c.MaxSessionCount != nil {
+			ans.AdminSession.MaxSessionCount = strconv.Itoa(*c.MaxSessionCount)
+		}
 	}
 
-	maxSessionTime := *c.MaxSessionTime
-	maxSessionCount := *c.MaxSessionCount
-	ans.AdminSession = &adminSession{
-		MaxSessionTime:  strconv.Itoa(maxSessionTime),
-		MaxSessionCount: strconv.Itoa(maxSessionCount),
+	if c.IdleTimeout != nil {
+		ans.IdleTimeout = strconv.Itoa(*c.IdleTimeout)
 	}
+
 	return ans
 }
 
@@ -286,76 +335,96 @@ func (o *config_v3) normalize() Config {
 		HostnameTypeInSyslog:         o.HostnameTypeInSyslog,
 	}
 
-	if o.FailedAttempts != util.EmptyString {
-		failedAttempts, err := strconv.Atoi(o.FailedAttempts)
+	if o.AdminLockout.FailedAttempts != util.EmptyString {
+		failedAttempts, err := strconv.Atoi(o.AdminLockout.FailedAttempts)
 		if err != nil {
 			panic(err)
 		}
 		ans.FailedAttempts = &failedAttempts
 	}
 
-	if o.LockoutTime != util.EmptyString {
-		lockoutTime, err := strconv.Atoi(o.LockoutTime)
+	if o.AdminLockout.LockoutTime != util.EmptyString {
+		lockoutTime, err := strconv.Atoi(o.AdminLockout.LockoutTime)
 		if err != nil {
 			panic(err)
 		}
 		ans.LockoutTime = &lockoutTime
 	}
 
-	if o.MaxSessionCount != util.EmptyString {
-		maxSessionCount, err := strconv.Atoi(o.MaxSessionCount)
+	if o.AdminSession.MaxSessionCount != util.EmptyString {
+		maxSessionCount, err := strconv.Atoi(o.AdminSession.MaxSessionCount)
 		if err != nil {
 			panic(err)
 		}
 		ans.MaxSessionCount = &maxSessionCount
 	}
 
-	if o.MaxSessionTime != util.EmptyString {
-		maxSessionTime, err := strconv.Atoi(o.MaxSessionTime)
+	if o.AdminSession.MaxSessionTime != util.EmptyString {
+		maxSessionTime, err := strconv.Atoi(o.AdminSession.MaxSessionTime)
 		if err != nil {
 			panic(err)
 		}
 		ans.MaxSessionTime = &maxSessionTime
 	}
 
+	if o.IdleTimeout != util.EmptyString {
+		idleTimeout, err := strconv.Atoi(o.IdleTimeout)
+		if err != nil {
+			panic(err)
+		}
+		ans.IdleTimeout = &idleTimeout
+	}
+
 	return ans
 }
 
 type config_v3 struct {
-	XMLName                      xml.Name `xml:"management"`
-	EnableLogHighDpLoad          string   `xml:"enable-log-high-dp-load,omitempty"`
-	EnableHighSpeedLogForwarding string   `xml:"enable-high-speed-log-forwarding,omitempty"`
-	SupportUtf8ForLogOutput      string   `xml:"support-utf8-for-log-output,omitempty"`
-	TrafficStopOnLogdbFull       string   `xml:"traffic-stop-on-logdb-full,omitempty"`
-	HostnameTypeInSyslog         string   `xml:"hostname-type-in-syslog,omitempty"`
-	//AdminLockout                 *adminLockout `xml:"admin-lockout"`
-	//AdminSession                 *adminSession `xml:"admin-session"`
-	FailedAttempts  string `xml:"admin-lockout>failed-attempts,omitempty"`
-	LockoutTime     string `xml:"admin-lockout>lockout-time,omitempty"`
-	MaxSessionCount string `xml:"admin-session>max-session-count,omitempty"`
-	MaxSessionTime  string `xml:"admin-session>max-session-time,omitempty"`
+	XMLName                      xml.Name      `xml:"management"`
+	EnableLogHighDpLoad          string        `xml:"enable-log-high-dp-load,omitempty"`
+	EnableHighSpeedLogForwarding string        `xml:"enable-high-speed-log-forwarding,omitempty"`
+	SupportUtf8ForLogOutput      string        `xml:"support-utf8-for-log-output,omitempty"`
+	TrafficStopOnLogdbFull       string        `xml:"traffic-stop-on-logdb-full,omitempty"`
+	HostnameTypeInSyslog         string        `xml:"hostname-type-in-syslog,omitempty"`
+	IdleTimeout                  string        `xml:"idle-timeout,omitempty"`
+	AdminLockout                 *adminLockout `xml:"admin-lockout"`
+	AdminSession                 *adminSession `xml:"admin-session"`
+	StoragePartition             string        `xml:"storage-partition>internal"`
 }
 
 func specify_v3(c Config) interface{} {
-	ans := config_v1{
+	ans := config_v3{
 		EnableLogHighDpLoad:          util.YesNoEmpty(c.EnableLogHighDpLoad),
 		EnableHighSpeedLogForwarding: util.YesNoEmpty(c.EnableHighSpeedLogForwarding),
 		SupportUtf8ForLogOutput:      util.YesNoEmpty(c.SupportUtf8ForLogOutput),
 		TrafficStopOnLogdbFull:       util.YesNoEmpty(c.TrafficStopOnLogdbFull),
+		HostnameTypeInSyslog:         c.HostnameTypeInSyslog,
+	}
+	if c.FailedAttempts != nil || c.LockoutTime != nil {
+		ans.AdminLockout = &adminLockout{}
+		if c.FailedAttempts != nil {
+			failedAttempts := *c.FailedAttempts
+			ans.AdminLockout.FailedAttempts = strconv.Itoa(failedAttempts)
+		}
+		if c.LockoutTime != nil {
+			lockoutTime := *c.LockoutTime
+			ans.AdminLockout.LockoutTime = strconv.Itoa(lockoutTime)
+		}
 	}
 
-	failedAttempts := *c.FailedAttempts
-	lockoutTime := *c.LockoutTime
-	ans.AdminLockout = &adminLockout{
-		FailedAttempts: strconv.Itoa(failedAttempts),
-		LockoutTime:    strconv.Itoa(lockoutTime),
+	if c.MaxSessionTime != nil || c.MaxSessionCount != nil {
+		ans.AdminSession = &adminSession{}
+		if c.MaxSessionTime != nil {
+			ans.AdminSession.MaxSessionTime = strconv.Itoa(*c.MaxSessionTime)
+
+		}
+		if c.MaxSessionCount != nil {
+			ans.AdminSession.MaxSessionCount = strconv.Itoa(*c.MaxSessionCount)
+		}
 	}
 
-	maxSessionTime := *c.MaxSessionTime
-	maxSessionCount := *c.MaxSessionCount
-	ans.AdminSession = &adminSession{
-		MaxSessionTime:  strconv.Itoa(maxSessionTime),
-		MaxSessionCount: strconv.Itoa(maxSessionCount),
+	if c.IdleTimeout != nil {
+		ans.IdleTimeout = strconv.Itoa(*c.IdleTimeout)
 	}
+
 	return ans
 }
