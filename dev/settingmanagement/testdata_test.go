@@ -13,11 +13,11 @@ type testCase struct {
 func getTests() []testCase {
 	trueVal := true
 	return []testCase{
-		{"v1 with raw", version.Number{6, 1, 0, ""}, Config{
-			EnableLogHighDpLoad: &trueVal,
-			//EnableHighSpeedLogForwarding: &trueVal,
-			SupportUtf8ForLogOutput: &trueVal,
-			TrafficStopOnLogdbFull:  &trueVal,
+		{"test device and panos", version.Number{10, 0, 0, ""}, Config{
+			EnableLogHighDpLoad:          &trueVal,
+			EnableHighSpeedLogForwarding: &trueVal,
+			SupportUtf8ForLogOutput:      &trueVal,
+			TrafficStopOnLogdbFull:       &trueVal,
 		}},
 	}
 }
