@@ -12,6 +12,7 @@ import (
 type Config struct {
 	Template                     string
 	EnableLogHighDpLoad          *bool
+	ThreatVaultAccess            *bool
 	EnableHighSpeedLogForwarding *bool
 	SupportUtf8ForLogOutput      *bool
 	TrafficStopOnLogdbFull       *bool
@@ -31,6 +32,7 @@ func (o *Config) Merge(s Config) {
 		o.Template = s.Template
 	}
 
+	o.ThreatVaultAccess = s.ThreatVaultAccess
 	o.EnableLogHighDpLoad = s.EnableLogHighDpLoad
 	o.EnableHighSpeedLogForwarding = s.EnableHighSpeedLogForwarding
 	o.SupportUtf8ForLogOutput = s.SupportUtf8ForLogOutput
@@ -77,6 +79,7 @@ func (o *container_v1) Normalize() []Config {
 
 func (o *config_device) normalize() Config {
 	ans := Config{
+		ThreatVaultAccess:            util.AsBoolEmpty(o.ThreatVaultAccess),
 		EnableLogHighDpLoad:          util.AsBoolEmpty(o.EnableLogHighDpLoad),
 		EnableHighSpeedLogForwarding: util.AsBoolEmpty(o.EnableLogHighDpLoad),
 		SupportUtf8ForLogOutput:      util.AsBoolEmpty(o.SupportUtf8ForLogOutput),
@@ -133,6 +136,7 @@ func (o *config_device) normalize() Config {
 
 type config_device struct {
 	XMLName                      xml.Name      `xml:"management"`
+	ThreatVaultAccess            string        `xml:"threat-vault-access,omitempty"`
 	EnableLogHighDpLoad          string        `xml:"enable-log-high-dp-load,omitempty"`
 	EnableHighSpeedLogForwarding string        `xml:"enable-high-speed-log-forwarding,omitempty"`
 	SupportUtf8ForLogOutput      string        `xml:"support-utf8-for-log-output,omitempty"`
@@ -169,6 +173,8 @@ func specify_v1(c Config) interface{} {
 	if c.Internal {
 		ans := config_panos{}
 		ans.HostnameTypeInSyslog = c.HostnameTypeInSyslog
+		ans.SupportUtf8ForLogOutput = util.YesNoEmpty(c.SupportUtf8ForLogOutput)
+		ans.ThreatVaultAccess = util.YesNoEmpty(c.ThreatVaultAccess)
 		if c.FailedAttempts != nil || c.LockoutTime != nil {
 			ans.AdminLockout = &adminLockout{}
 			if c.FailedAttempts != nil {
@@ -199,10 +205,41 @@ func specify_v1(c Config) interface{} {
 		return ans
 	}
 	ans := config_device{
+		ThreatVaultAccess:            util.YesNoEmpty(c.ThreatVaultAccess),
 		EnableLogHighDpLoad:          util.YesNoEmpty(c.EnableLogHighDpLoad),
 		EnableHighSpeedLogForwarding: util.YesNoEmpty(c.EnableHighSpeedLogForwarding),
 		SupportUtf8ForLogOutput:      util.YesNoEmpty(c.SupportUtf8ForLogOutput),
 		TrafficStopOnLogdbFull:       util.YesNoEmpty(c.TrafficStopOnLogdbFull),
+	}
+
+	ans.HostnameTypeInSyslog = c.HostnameTypeInSyslog
+	if c.FailedAttempts != nil || c.LockoutTime != nil {
+		ans.AdminLockout = &adminLockout{}
+		if c.FailedAttempts != nil {
+			ans.AdminLockout.FailedAttempts = strconv.Itoa(*c.FailedAttempts)
+		}
+		if c.LockoutTime != nil {
+			ans.AdminLockout.LockoutTime = strconv.Itoa(*c.LockoutTime)
+		}
+	}
+
+	if c.MaxSessionTime != nil || c.MaxSessionCount != nil {
+		ans.AdminSession = &adminSession{}
+		if c.MaxSessionTime != nil {
+			ans.AdminSession.MaxSessionTime = strconv.Itoa(*c.MaxSessionTime)
+
+		}
+		if c.MaxSessionCount != nil {
+			ans.AdminSession.MaxSessionCount = strconv.Itoa(*c.MaxSessionCount)
+		}
+	}
+
+	if c.IdleTimeout != nil {
+		ans.IdleTimeout = strconv.Itoa(*c.IdleTimeout)
+	}
+
+	if c.IdleTimeout != nil {
+		ans.IdleTimeout = strconv.Itoa(*c.IdleTimeout)
 	}
 
 	return ans
