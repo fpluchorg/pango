@@ -144,12 +144,8 @@ type config_device struct {
 }
 
 type config_panos struct {
-	XMLName              xml.Name          `xml:"management"`
-	HostnameTypeInSyslog string            `xml:"hostname-type-in-syslog,omitempty"`
-	IdleTimeout          string            `xml:"idle-timeout,omitempty"`
-	AdminLockout         *adminLockout     `xml:"admin-lockout"`
-	AdminSession         *adminSession     `xml:"admin-session"`
-	StoragePartition     *storagePartition `xml:"storage-partition"`
+	config_device
+	StoragePartition *storagePartition `xml:"storage-partition"`
 }
 
 type adminLockout struct {
@@ -171,9 +167,8 @@ type storagePartition struct {
 // this separation logic is done as panos api will not work without having storage-partition param
 func specify_v1(c Config) interface{} {
 	if c.Internal {
-		ans := config_panos{
-			HostnameTypeInSyslog: c.HostnameTypeInSyslog,
-		}
+		ans := config_panos{}
+		ans.HostnameTypeInSyslog = c.HostnameTypeInSyslog
 		if c.FailedAttempts != nil || c.LockoutTime != nil {
 			ans.AdminLockout = &adminLockout{}
 			if c.FailedAttempts != nil {
