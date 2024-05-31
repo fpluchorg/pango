@@ -53,7 +53,6 @@ func (c *Firewall) xpath(vals []string) ([]string, error) {
 		"config",
 		"mgt-config",
 		"password-complexity",
-		util.AsEntryXpath(vals),
 	)
 
 	return ans, nil

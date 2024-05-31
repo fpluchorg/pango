@@ -1,6 +1,7 @@
 package passwordcomplexity
 
 import (
+	"encoding/xml"
 	"github.com/fpluchorg/pango/util"
 	"github.com/fpluchorg/pango/version"
 )
@@ -54,11 +55,25 @@ func (o Entry) Specify(v version.Number) (string, interface{}) {
 }
 
 type normalizer interface {
-	Normalize() Entry
+	Normalize() []Entry
+	Names() []string
 }
 
-func (o *entry_v1) Normalize() Entry {
-	return o.normalize()
+type container_v1 struct {
+	Answer []entry_v1 `xml:"password-complexity"`
+}
+
+func (o *container_v1) Names() []string {
+	return nil
+}
+
+func (o *container_v1) Normalize() []Entry {
+	ans := make([]Entry, 0, len(o.Answer))
+	for i := range o.Answer {
+		ans = append(ans, o.Answer[i].normalize())
+	}
+
+	return ans
 }
 
 func (o *entry_v1) normalize() Entry {
@@ -132,6 +147,7 @@ func (o *entry_v1) normalize() Entry {
 }
 
 type entry_v1 struct {
+	XMLName                        xml.Name        `xml:"password-complexity"`
 	MinimumLength                  *int            `xml:"minimum-length,omitempty"`
 	Enabled                        string          `xml:"enabled,omitempty"`
 	MinimumUppercaseLetters        *int            `xml:"minimum-uppercase-letters,omitempty"`

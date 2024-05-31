@@ -7,7 +7,7 @@ import (
 )
 
 func versioning(v version.Number) (normalizer, func(Entry) interface{}) {
-	return &entry_v1{}, specify_v1
+	return &container_v1{}, specify_v1
 }
 
 func specifier(e ...Entry) []namespace.Specifier {
@@ -32,7 +32,7 @@ func first(ans normalizer, err error) (Entry, error) {
 		return Entry{}, err
 	}
 
-	return ans.Normalize(), nil
+	return ans.Normalize()[0], nil
 }
 
 func all(ans normalizer, err error) (Entry, error) {
@@ -40,7 +40,7 @@ func all(ans normalizer, err error) (Entry, error) {
 		return Entry{}, err
 	}
 
-	return ans.Normalize(), nil
+	return ans.Normalize()[0], nil
 }
 
 // PanoramaNamespace returns an initialized namespace.

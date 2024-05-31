@@ -49,25 +49,23 @@ func (c *Panorama) Delete(tmpl string, e ...interface{}) error {
 
 func (c *Panorama) pather(tmpl string) namespace.Pather {
 	return func(v []string) ([]string, error) {
-		return c.xpath(tmpl, v)
+		return c.xpath(tmpl)
 	}
 }
 
-func (c *Panorama) xpath(tmpl string, vals []string) ([]string, error) {
+func (c *Panorama) xpath(tmpl string) ([]string, error) {
 	var ans []string
 
-	if tmpl != "" {
-		ans = make([]string, 0, 12)
+	ans = make([]string, 0, 12)
+
+	if tmpl != util.EmptyString {
 		ans = append(ans, util.TemplateXpathPrefix(tmpl, util.EmptyString)...)
-	} else {
-		ans = make([]string, 0, 4)
 	}
 
 	ans = append(ans,
 		"config",
 		"mgt-config",
 		"password-complexity",
-		util.AsEntryXpath(vals),
 	)
 
 	return ans, nil

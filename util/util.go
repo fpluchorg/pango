@@ -189,7 +189,7 @@ func LogCollectorXpathPrefix(logcollector string) []string {
 
 // TemplateXpathPrefix returns the template xpath prefix of the given template name.
 func TemplateXpathPrefix(tmpl, ts string) []string {
-	if tmpl != "" {
+	if tmpl != EmptyString {
 		return []string{
 			"config",
 			"devices",
